@@ -11,12 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('anak', function (Blueprint $table) {
+        Schema::create('balita', function (Blueprint $table) {
             $table->id();
             $table->string('nik')->unique();
             $table->string('nama', 100);
             $table->tinyInteger('jenis_kelamin'); // 1 = laki-laki, 0 = perempuan
-            $table->date('tanggal_lahir');
+            $table->date('tgl_lahir');
+            $table->string('nama_ortu', 50);
+            $table->text('alamat');
+
             $table->timestamps();
         });
     }

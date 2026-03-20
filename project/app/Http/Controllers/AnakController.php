@@ -12,8 +12,8 @@ class AnakController extends Controller
      */
     public function index()
     {
-        $anak = Anak::latest()->get();
-        return view('balita.data-balita', compact('anak'));
+        $balita = Anak::latest()->get();
+        return view('balita.data-balita', compact('balita'));
     }
 
     /**
@@ -30,61 +30,54 @@ class AnakController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-        'nik' => 'required|unique:anak',
-        'nama' => 'required',
-        'jenis_kelamin' => 'required',
-        'tanggal_lahir' => 'required|date',
-    ]);
+        Anak::create([
+            'nik' => $request->nik,
+            'nama' => $request->nama,
+            'jenis_kelamin' => $request->jenis_kelamin,
+            'tgl_lahir' => $request->tgl_lahir,
+            'nama_ortu' => $request->nama_ortu,
+            'alamat' => $request->alamat
+        ]);
 
-        Anak::create($request->all());
-
-        return redirect()->route('balita.data-balita')
-            ->with('success', 'Data balita berhasil ditambahkan');
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
+        return redirect()->route('balita.index')->with('success','Data berhasil ditambahkan');
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Anak $anak)
+    public function edit($id)
     {
-        return view('balita.edit', compact('anak'));
+        $balita = Anak::findOrFail($id);
+        return view('balita.edit', compact('balita'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Anak $anak)
+    public function update(Request $request, $id)
     {
-        $request->validate([
-            'nik' => 'required|unique:anak,nik,' . $anak->id,
-            'nama' => 'required',
-            'jenis_kelamin' => 'required',
-            'tanggal_lahir' => 'required|date',
+        $balita = Anak::findOrFail($id);
+
+        $balita->update([
+            'nik' => $request->nik,
+            'nama' => $request->nama,
+            'jenis_kelamin' => $request->jenis_kelamin,
+            'tgl_lahir' => $request->tgl_lahir,
+            'nama_ortu' => $request->nama_ortu,
+            'alamat' => $request->alamat
         ]);
 
-        $anak->update($request->all());
-
-        return redirect()->route('balita.data-balita')
-            ->with('success', 'Data balita berhasil diperbarui');
+        return redirect()->route('balita.index')->with('success','Data berhasil diupdate');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Anak $anak)
+    public function destroy($id)
     {
-        $anak->delete();
+        $balita = Anak::findOrFail($id);
+        $balita->delete();
 
-        return redirect()->route('anak.index')
-            ->with('success', 'Data anak berhasil dihapus');
+        return redirect()->route('balita.index')->with('success','Data berhasil dihapus');
     }
 }

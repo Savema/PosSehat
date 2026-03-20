@@ -15,8 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('nik')->unique();
             $table->string('nama', 100);
-            $table->integer('usia');
-            $table->integer('usia_kehamilan'); // minggu
+            $table->date('tgl_lahir');
+            $table->text('alamat');
+            $table->string('no_hp', 15);
             $table->timestamps();
         });
     }

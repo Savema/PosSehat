@@ -1,11 +1,11 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Form Data Balita')
+@section('title', 'Edit Data Ibu Hamil')
 
 @section('content')
 
     <div class="pagetitle mb-4">
-        <h1 style="color: #9c3a5b;">Form Data Balita</h1>
+        <h1 style="color: #9c3a5b;">Edit Data Ibu Hamil</h1>
     </div>
 
     <section class="section">
@@ -14,49 +14,40 @@
 
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title">Tambah Data Balita</h5>
+              <h5 class="card-title">Edit Data Ibu Hamil</h5>
 
               <!-- General Form Elements -->
-              <form action="{{ route('balita.store') }}" method="POST">
+              <form action="{{ route('ibu_hamil.update', $ibu_hamil->id) }}" method="POST">
                 @csrf
+                @method('PUT')
                 <div class="row mb-3">
                   <label for="nik" class="col-sm-2 col-form-label">NIK</label>
                   <div class="col-sm-10">
-                    <input type="text" class="form-control" name="nik" required>
+                    <input type="text" class="form-control" name="nik" value="{{ $ibu_hamil->nik }}">
                   </div>
                 </div>
                 <div class="row mb-3">
-                  <label for="nama" class="col-sm-2 col-form-label">Nama Balita</label>
+                  <label for="nama" class="col-sm-2 col-form-label">Nama</label>
                   <div class="col-sm-10">
-                    <input type="text" class="form-control" name="nama" required>
-                  </div>
-                </div>
-                <div class="row mb-3">
-                  <label for="jenis_kelamin" class="col-sm-2 col-form-label">Jenis Kelamin</label>
-                  <div class="col-sm-10">
-                    <select name="jenis_kelamin" class="form-control" required>
-                        <option value="">-- Pilih Jenis Kelamin --</option>
-                        <option value="1">Laki-laki</option>
-                        <option value="0">Perempuan</option>
-                    </select>
+                    <input type="text" class="form-control" name="nama" value="{{ $ibu_hamil->nama }}">
                   </div>
                 </div>
                 <div class="row mb-3">
                   <label for="tgl_lahir" class="col-sm-2 col-form-label">Tanggal Lahir</label>
                   <div class="col-sm-10">
-                    <input type="date" class="form-control" name="tgl_lahir" required>
-                  </div>
-                </div>
-                <div class="row mb-3">
-                  <label for="nama_ortu" class="col-sm-2 col-form-label">Nama Ortu</label>
-                  <div class="col-sm-10">
-                    <input type="text" class="form-control" name="nama_ortu" required>
+                    <input type="date" class="form-control" name="tgl_lahir" value="{{ $ibu_hamil->tgl_lahir }}">
                   </div>
                 </div>
                 <div class="row mb-3">
                   <label for="alamat" class="col-sm-2 col-form-label">Alamat</label>
                   <div class="col-sm-10">
-                    <input type="text" class="form-control" name="alamat" required>
+                    <input type="text" class="form-control" name="alamat" value="{{ $ibu_hamil->alamat }}">
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <label for="no_hp" class="col-sm-2 col-form-label">NO HP</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" name="no_hp" value="{{ $ibu_hamil->no_hp }}">
                   </div>
                 </div>
 

@@ -321,24 +321,28 @@
           <div class="card shadow-lg animated" style="animation-delay: 1s;">
             <h3 class="text-center fw-bold mb-3 " style="animation-delay: 0.5s; color: #ff5757">Selamat Datang</h3>
             <p class="text-center text-muted mb-4 animated" style="animation-delay: 0.7s;">Silakan masuk untuk melanjutkan</p>
+
+            @if(session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+            @endif
+
             <form action="/proseslogin" method="POST">
-              <!-- @csrf (aktifkan di Laravel) -->
-              <div class="mb-3 animated" style="animation-delay: 0.9s;">
-                <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control rounded-3" id="email" name="email" placeholder="Masukkan email Anda" required>
-              </div>
-              <div class="mb-3 animated" style="animation-delay: 1.1s;">
-                <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control rounded-3" id="password" name="password" placeholder="Masukkan password Anda" required>
-              </div>
+              @csrf
+                <div class="mb-3 animated" style="animation-delay: 0.9s;">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control rounded-3" id="email" name="email" placeholder="Masukkan email Anda" required>
+                </div>
+                <div class="mb-3 animated" style="animation-delay: 1.1s;">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control rounded-3" id="password" name="password" placeholder="Masukkan password Anda" required>
+                </div>
               <button type="submit" class="btn btn-primary w-100 rounded-pill mt-3 animated" style="animation-delay: 1.3s;">Masuk</button>
             </form>
+            
             <div class="text-center mt-4 animated" style="animation-delay: 1.5s;">
               <a href="#" class="text-muted small">Lupa password?</a>
-            </div>
-            <hr class="my-4">
-            <div class="text-center animated" style="animation-delay: 1.7s;">
-              <p class="small text-muted">Belum punya akun? <a href="/register" class="text-primary">Daftar</a></p>
             </div>
           </div>
         </div>

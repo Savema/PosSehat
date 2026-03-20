@@ -9,12 +9,19 @@ class Anak extends Model
 {
     use HasFactory;
 
-    protected $table = 'anak';
+    protected $table = 'balita';
 
     protected $fillable = [
         'nik',
         'nama',
         'jenis_kelamin',
-        'tanggal_lahir',
+        'tgl_lahir',
+        'nama_ortu',
+        'alamat'
     ];
+
+    public function getJenisKelaminTextAttribute()
+    {
+        return $this->jenis_kelamin == 1 ? 'Laki-laki' : 'Perempuan';
+    }
 }
