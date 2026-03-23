@@ -12,20 +12,16 @@ class PengukuranBalita extends Model
     protected $table = 'pengukuran_balita';
 
     protected $fillable = [
-        'balita_id',
-        'user_id',
-        'tanggal',
-        'berat_badan',
-        'tinggi_badan',
-        'lingkar_kepala',
-        'usia_saat_ukur',
-        'hasil',
-        'zs_tbu'
+        'balita_id', 'user_id', 'berat_badan', 'tinggi_badan',
+        'lingkar_kepala', 'usia_saat_ukur', 'tanggal',
+        'hasil', 'zs_tbu', 'bmi', 'zs_bmi_u', 'status_gizi_bmi'
     ];
 
-    public function ibuHamil()
+    // Perbaiki relasi ini
+    public function balita()
     {
-        return $this->belongsTo(IbuHamil::class, 'ibu_hamil_id');
+        // Sesuaikan 'Anak::class' dengan nama Model Balita kamu
+        return $this->belongsTo(Anak::class, 'balita_id');
     }
 
     public function petugas()

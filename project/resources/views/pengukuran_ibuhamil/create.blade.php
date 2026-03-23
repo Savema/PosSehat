@@ -26,7 +26,7 @@
                 </ul>
                 </div>
                 @endif
-              <form action="{{ route('pengukuran_ibu_hamil.store') }}" method="POST">
+              <form action="{{ route('pengukuran_balita.store') }}" method="POST">
                 @csrf
                 <div class="row mb-3">
                   <label for="tanggal" class="col-sm-2 col-form-label">Tanggal</label>
