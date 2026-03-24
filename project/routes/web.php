@@ -68,3 +68,10 @@ Route::post('/cetak-ibu-hamil/{id}', [PengukuranIbuHamilController::class, 'ceta
 Route::middleware(['auth'])->group(function () {
     Route::resource('pengukuran_balita', PengukuranBalitaController::class);
 });
+
+Route::get('/pengukuran-balita/{id}/detail',
+    [PengukuranBalitaController::class, 'detail'])
+    ->name('pengukuran_balita.detail');
+
+Route::post('/cetak-balita/{id}', [PengukuranBalitaController::class, 'cetakPdf']);
+

@@ -41,29 +41,28 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {{-- @forelse ($p_ibuhamil as $index => $ibu) --}}
+                        @forelse ($p_balita as $index => $balita)
                             <tr>
-                                {{-- <td>{{ $index + 1 }}</td>
-                                <td>{{ $ibu->petugas->nama ?? '-' }}</td>
-                                <td>{{ $ibu->tanggal }}</td>
-                                <td>{{ $ibu->ibuHamil->nama ?? '-' }}</td>
-                                <td>{{ \Carbon\Carbon::parse($ibu->ibuHamil->tgl_lahir)->age ?? '-' }}</td>
-                                <td>{{ $ibu->berat_badan }}</td>
-                                <td>{{ $ibu->tinggi_badan }}</td>
-                                <td>{{ $ibu->lila }}</td>
-                                <td class="text-center">{{ $ibu->usia_kehamilan }}</td>
-                                <td>{{ $ibu->imt }}</td>
-                                <td>{{ $ibu->status_gizi }}</td> --}}
-                                {{-- <td class="text-center">
+                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $balita->petugas->nama ?? '-' }}</td>
+                                <td>{{ $balita->tanggal }}</td>
+                                <td>{{ $balita->balita->nama ?? '-' }}</td>
+                                <td>{{ \Carbon\Carbon::parse($balita->balita->tgl_lahir)->age ?? '-' }}</td>
+                                <td>{{ $balita->berat_badan }}</td>
+                                <td>{{ $balita->tinggi_badan }}</td>
+                                <td>{{ $balita->lingkar_kepala }}</td>
+                                <td>{{ $balita->hasil }}</td>
+                                <td>{{ $balita->zs_tbu }}</td>
+                                <td class="text-center">
                                     <!-- Detail -->
-                                    <a href="{{ route('pengukuran_ibu_hamil.detail', $ibu->id) }}"
+                                    <a href="{{ route('pengukuran_balita.detail', $balita->id) }}"
                                         class="btn btn-sm btn-info"
                                         title="Detail">
                                         <i class="bi bi-eye"></i>
                                     </a>
 
                                     <!-- Delete -->
-                                    <form action="{{ route('pengukuran_ibu_hamil.destroy', $ibu->id) }}"
+                                    <form action="{{ route('pengukuran_balita.destroy', $balita->id) }}"
                                         method="POST"
                                         style="display:inline;">
                                         @csrf
@@ -75,21 +74,23 @@
                                         </button>
                                     </form>
 
-                                </td> --}}
+                                </td>
                             </tr>
 
-                        {{-- @empty --}}
+                        @empty
                             <tr>
                                 <td colspan="12" class="text-center text-muted">
                                     Belum ada data pengukuran
                                 </td>
                             </tr>
-                        {{-- @endforelse --}}
+                        @endforelse
                     </tbody>
                 </table>
             </div>
 
         </div>
     </div>
+
+
 
 @endsection

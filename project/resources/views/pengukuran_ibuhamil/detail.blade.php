@@ -67,14 +67,18 @@
 
             <div id="grafikIbuHamil" style="min-height:350px;"></div>
             <hr>
-            <h5 class="card-title">Edukasi dan Informasi</h5>
+
+            <h5 class="card-title">Edukasi dan Informasi Kesehatan</h5>
+                    <div class="edukasi-content p-3 bg-light rounded">
                         @forelse($edukasi as $item)
-                            <b>{{ $item->judul }}</b>
-                            <p>{{ $item->konten }}</p>
+                            <div class="mb-3">
+                                <h6 class="fw-bold text-primary"><i class="bi bi-info-circle-fill me-2"></i>{{ $item->judul }}</h6>
+                                <p class="mb-0">{{ $item->konten }}</p>
+                            </div>
                         @empty
-                        <p class="text-danger">Edukasi belum tersedia</p>
+                            <p class="text-danger">Edukasi belum tersedia untuk kategori ini.</p>
                         @endforelse
-                </div>
+                    </div>
             </div><!-- End Default Card -->
         </div>
       </div>
@@ -86,41 +90,45 @@
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
+    // Ambil data dari Controller
     var tanggal = @json($tanggal ?? []);
-    var bb = @json($bb ?? []);
-    var imt = @json($imt ?? []);
+    var imt = @json($imt ?? []); // IMT
+    var bb = @json($bb ?? []); // Berat Badan
 
     var options = {
         series: [
-        {
-            name: 'Berat Badan',
-            data: bb
-        },
-        {
-            name: 'IMT',
-            data: imt
-        }
+            {
+                name: 'Berat Badan (kg)',
+                data: bb
+            },
+            {
+                name: 'IMT',
+                data: imt
+            }
         ],
         chart: {
             type: 'line',
-            height: 350
+            height: 350,
+            zoom: { enabled: false }
         },
         stroke: {
             curve: 'smooth',
-            width: 3
+            width: [4, 4]
         },
         markers: {
-            size: 6
+            size: 5
         },
         xaxis: {
-            categories: tanggal
+            categories: tanggal,
+            title: { text: 'Tanggal Pengukuran' }
         },
-        tooltip: {
-            shared: false,
-            intersect: true
+        yaxis: {
+            title: { text: 'Nilai Pengukuran' }
         },
-        colors: ['#2ecc71','#ff7f32']
+        colors: ['#9c3a5b', '#2ecc71'], // Warna disesuaikan
+        legend: { position: 'top' }
     };
+
 
     // ✅ WAJIB: buat chart
     var chart = new ApexCharts(document.querySelector("#grafikIbuHamil"), options);

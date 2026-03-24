@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Anak;
+use App\Models\Edukasi2;
+use App\Models\Edukasi;
 use App\Models\PengukuranBalita;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -28,9 +30,6 @@ class PengukuranBalitaController extends Controller
 
     public function store(Request $request)
     {
-        // Cek apakah data dari form sampai
-        // dd($request->all());
-
         $request->validate([
             'balita_id'      => 'required',
             'tanggal'        => 'required',
@@ -54,15 +53,15 @@ class PengukuranBalitaController extends Controller
                 $hasilML = $response->json();
 
                 $mapHasil = [
-                    0 => 'Stunting',          // Z < -3 (Sangat Pendek)
-                    1 => 'Risiko Stunting',   // Z < -2 (Pendek)
-                    2 => 'Normal'             // Z >= -2 (Normal)
+                    0 => 'Stunting',
+                    1 => 'Risiko Stunting',
+                    2 => 'Normal'
                 ];
 
-                // Variabel ini sudah mengambil teks dari array mapHasil
                 $teksHasil = $mapHasil[$hasilML['Status_Stunting']] ?? 'Normal';
 
-                $simpan = PengukuranBalita::create([
+                // 1. Simpan Pengukuran (Cukup Sekali Saja)
+                $pengukuran = PengukuranBalita::create([
                     'balita_id'       => $request->balita_id,
                     'user_id'         => auth()->id() ?? 1,
                     'berat_badan'     => $request->berat_badan,
@@ -70,21 +69,86 @@ class PengukuranBalitaController extends Controller
                     'lingkar_kepala'  => $request->lingkar_kepala,
                     'usia_saat_ukur'  => $request->usia,
                     'tanggal'         => $request->tanggal,
-                    'hasil'           => $teksHasil, // LANGSUNG PANGGIL VARIABELNYA DI SINI
+                    'hasil'           => $teksHasil,
                     'zs_tbu'          => $hasilML['Zscore'],
                     'bmi'             => $request->berat_badan / (($request->tinggi_badan/100) ** 2),
                 ]);
 
-                // Jika berhasil simpan, pindah ke index
-                return redirect()->route('pengukuran_balita.index')->with('success', 'Berhasil!');
+                // 2. Ambil Template Edukasi
+                $templates = Edukasi::where('kategori', $teksHasil)->get();
+
+                // 3. Simpan ke tabel Edukasi2
+                foreach ($templates as $item) {
+                    Edukasi2::create([
+                        'balita_id'            => $request->balita_id,
+                        'pengukuran_balita_id' => $pengukuran->id,
+                        'judul'                => $item->judul,
+                        'konten'               => $item->konten,
+                        'kategori'             => $teksHasil
+                    ]);
+                }
+
+                return redirect()->route('pengukuran_balita.index')->with('success', 'Berhasil menyimpan data dan edukasi!');
             }
 
-            // Jika API Flask error 400/500
+            // Jika API Flask error
             dd("Flask Error: " . $response->body());
 
         } catch (\Exception $e) {
-            // Jika ada error database atau koneksi, layar akan jadi hitam dan muncul pesan errornya
             dd("Laravel Error: " . $e->getMessage());
         }
+    }
+
+    public function destroy($id)
+    {
+        $p_balita = PengukuranBalita::findOrFail($id);
+        $p_balita->delete();
+
+        return redirect()->route('pengukuran_balita.index')->with('success','Data berhasil dihapus');
+
+    }
+
+    public function detail($id)
+    {
+        // 1. Ambil data pengukuran utama berdasarkan ID yang diklik
+        // Gunakan findOrFail supaya kalau ID tidak ada, muncul error 404 bukan 'undefined variable'
+        $pengukuran = PengukuranBalita::with(['balita', 'petugas'])->findOrFail($id);
+
+        // 2. Ambil riwayat pertumbuhan balita tersebut untuk grafik
+        $riwayat = PengukuranBalita::where('balita_id', $pengukuran->balita_id)
+                    ->orderBy('tanggal', 'asc')
+                    ->get();
+
+        // 3. Siapkan data untuk grafik ApexCharts
+        $tanggal = $riwayat->pluck('tanggal')->toArray();
+        $tb = $riwayat->pluck('tinggi_badan')->toArray();
+        $bb = $riwayat->pluck('berat_badan')->toArray();
+
+        // 4. Ambil edukasi yang tersimpan untuk pengukuran ini
+        $edukasi = Edukasi2::where('pengukuran_balita_id', $id)->get();
+
+        // 5. KIRIM SEMUA KE VIEW (Pastikan 'pengukuran' ada di sini)
+        return view('pengukuran_balita.detail', compact(
+            'pengukuran',
+            'riwayat',
+            'edukasi',
+            'tanggal',
+            'tb',
+            'bb'
+        ));
+    }
+
+    public function cetakPdf(Request $request, $id)
+    {
+        $pengukuran = PengukuranBalita::with(['petugas','balita'])->findOrFail($id);
+        $edukasi = Edukasi2::where('pengukuran_balita_id', $id)->get();
+        $chartImage = $request->chartImage;
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView(
+            'pdf.hasil_balita',
+            compact('pengukuran','edukasi','chartImage')
+        );
+
+        return $pdf->download('laporan_balita.pdf');
     }
 }

@@ -16,15 +16,13 @@ return new class extends Migration
             $table->string('judul', 100);
             $table->text('konten');
             $table->enum('kategori', [
-                'Resiko tinggi stunting',
+                'Resiko stunting',
                 'Stunting',
                 'Normal',
-                'Resiko gizi lebih',
                 'Ibu hamil gizi kurang',
                 'Ibu hamil gizi normal',
                 'Ibu hamil gizi lebih',
                 'Ibu hamil obesitas',
-                'Ibu hamil risiko kek'
             ])->nullable();
             $table->timestamps();
         });
