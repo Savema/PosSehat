@@ -22,6 +22,18 @@
                 </a>
             </div>
 
+            <form method="GET" action="{{ route('pengukuran_balita.index') }}" class="mb-3">
+                <div class="input-group" style="max-width: 300px;">
+                    <input type="text" name="search" class="form-control" id="search"
+                        placeholder="Cari nama..."
+                        value="{{ request('search') }}">
+
+                    <button class="btn btn-primary" type="submit">
+                        <i class="bi bi-search"></i> Cari
+                    </button>
+                </div>
+            </form>
+
             <!-- Table -->
             <div class="table-responsive">
                 <table class="table table-hover align-middle datatable">
@@ -40,14 +52,14 @@
                             <th style="width: 15%" class="text-center">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="pengukuran-balita-table">
                         @forelse ($p_balita as $index => $balita)
                             <tr>
-                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $p_balita->firstItem() + $index }}</td>
                                 <td>{{ $balita->petugas->nama ?? '-' }}</td>
                                 <td>{{ $balita->tanggal }}</td>
                                 <td>{{ $balita->balita->nama ?? '-' }}</td>
-                                <td>{{ \Carbon\Carbon::parse($balita->balita->tgl_lahir)->age ?? '-' }}</td>
+                                <td>{{ \Carbon\Carbon::parse($balita->balita->tgl_lahir)->diffInMonths(\Carbon\Carbon::parse($balita->tanggal)) }} Bulan</td>
                                 <td>{{ $balita->berat_badan }}</td>
                                 <td>{{ $balita->tinggi_badan }}</td>
                                 <td>{{ $balita->lingkar_kepala }}</td>
@@ -88,9 +100,32 @@
                 </table>
             </div>
 
+            <div class="d-flex justify-content-center mt-3">
+                {{ $p_balita->withQueryString()->links() }}
+            </div>
+
         </div>
     </div>
 
+<script>
+let delayTimer;
 
+document.getElementById('search').addEventListener('keyup', function () {
+    clearTimeout(delayTimer);
 
+    let query = this.value;
+
+    delayTimer = setTimeout(() => {
+        fetch(`{{ route('pengukuran_balita.index') }}?search=` + query)
+        .then(response => response.text())
+        .then(html => {
+            let parser = new DOMParser();
+            let doc = parser.parseFromString(html, 'text/html');
+
+            let newTable = doc.querySelector('#pengukuran-balita-table').innerHTML;
+            document.getElementById('pengukuran-balita-table').innerHTML = newTable;
+        });
+    }, 300);
+});
+</script>
 @endsection

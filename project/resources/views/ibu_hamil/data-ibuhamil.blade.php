@@ -22,6 +22,18 @@
                 </a>
             </div>
 
+            <form method="GET" action="{{ route('ibu_hamil.index') }}" class="mb-3">
+                <div class="input-group" style="max-width: 300px;">
+                    <input type="text" name="search" class="form-control" id="search"
+                        placeholder="Cari nama..."
+                        value="{{ request('search') }}">
+
+                    <button class="btn btn-primary" type="submit">
+                        <i class="bi bi-search"></i> Cari
+                    </button>
+                </div>
+            </form>
+
             <!-- Table -->
             <div class="table-responsive">
                 <table class="table table-hover align-middle datatable">
@@ -35,10 +47,10 @@
                             <th style="width: 15%" class="text-center">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="ibu-hamil-table">
                         @forelse ($ibu_hamil as $index => $ibu_hamils)
                             <tr>
-                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $ibu_hamil->firstItem() + $index }}</td>
                                 <td>{{ $ibu_hamils->nama }}</td>
                                 <td>{{ $ibu_hamils->tgl_lahir }}</td>
                                 <td>{{ $ibu_hamils->alamat }}</td>
@@ -78,7 +90,33 @@
                 </table>
             </div>
 
+            <div class="d-flex justify-content-center mt-3">
+                {{ $ibu_hamil->withQueryString()->links() }}
+            </div>
+
         </div>
     </div>
+
+<script>
+let delayTimer;
+
+document.getElementById('search').addEventListener('keyup', function () {
+    clearTimeout(delayTimer);
+
+    let query = this.value;
+
+    delayTimer = setTimeout(() => {
+        fetch(`{{ route('ibu_hamil.index') }}?search=` + query)
+        .then(response => response.text())
+        .then(html => {
+            let parser = new DOMParser();
+            let doc = parser.parseFromString(html, 'text/html');
+
+            let newTable = doc.querySelector('#ibu-hamil-table').innerHTML;
+            document.getElementById('ibu-hamil-table').innerHTML = newTable;
+        });
+    }, 300);
+});
+</script>
 
 @endsection

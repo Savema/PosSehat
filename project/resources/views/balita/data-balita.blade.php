@@ -22,6 +22,18 @@
                 </a>
             </div>
 
+            <form method="GET" action="{{ route('balita.index') }}" class="mb-3">
+                <div class="input-group" style="max-width: 300px;">
+                    <input type="text" name="search" class="form-control" id="search"
+                        placeholder="Cari nama..."
+                        value="{{ request('search') }}">
+
+                    <button class="btn btn-primary" type="submit">
+                        <i class="bi bi-search"></i> Cari
+                    </button>
+                </div>
+            </form>
+
             <!-- Table -->
             <div class="table-responsive">
                 <table class="table table-hover align-middle datatable">
@@ -36,10 +48,10 @@
                             <th style="width: 15%" class="text-center">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="balita-table">
                         @forelse ($balita as $index => $balitas)
                             <tr>
-                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $balita->firstItem() + $index }}</td>
                                 <td>{{ $balitas->nama }}</td>
                                 <td>{{ $balitas->alamat }}</td>
                                 <td>{{ $balitas->tgl_lahir }}</td>
@@ -84,32 +96,33 @@
                 </table>
             </div>
 
-          {{-- <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Pagination with icon</h5>
-
-              <!-- Pagination with icons -->
-              <nav aria-label="Page navigation example">
-                <ul class="pagination">
-                  <li class="page-item">
-                    <a class="page-link" href="#" aria-label="Previous">
-                      <span aria-hidden="true">&laquo;</span>
-                    </a>
-                  </li>
-                  <li class="page-item"><a class="page-link" href="#">1</a></li>
-                  <li class="page-item"><a class="page-link" href="#">2</a></li>
-                  <li class="page-item"><a class="page-link" href="#">3</a></li>
-                  <li class="page-item">
-                    <a class="page-link" href="#" aria-label="Next">
-                      <span aria-hidden="true">&raquo;</span>
-                    </a>
-                  </li>
-                </ul>
-              </nav><!-- End Pagination with icons -->
-
+            <div class="d-flex justify-content-center mt-3">
+                {{ $balita->withQueryString()->links() }}
             </div>
-          </div> --}}
+
         </div>
     </div>
+
+<script>
+let delayTimer;
+
+document.getElementById('search').addEventListener('keyup', function () {
+    clearTimeout(delayTimer);
+
+    let query = this.value;
+
+    delayTimer = setTimeout(() => {
+        fetch(`{{ route('balita.index') }}?search=` + query)
+        .then(response => response.text())
+        .then(html => {
+            let parser = new DOMParser();
+            let doc = parser.parseFromString(html, 'text/html');
+
+            let newTable = doc.querySelector('#balita-table').innerHTML;
+            document.getElementById('balita-table').innerHTML = newTable;
+        });
+    }, 300);
+});
+</script>
 
 @endsection

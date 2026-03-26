@@ -15,14 +15,21 @@ use Illuminate\Support\Facades\DB;
 
 class PengukuranIbuHamilController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $search = $request->search;
 
-        $p_ibuhamil = PengukuranIbuHamil::with(['ibuHamil','petugas'])->get();
+        $p_ibuhamil = PengukuranIbuHamil::with(['ibuhamil','petugas'])
+            ->when($search, function ($query) use ($search) {
+                $query->whereHas('ibuhamil', function ($q) use ($search) {
+                    $q->where('nama', 'like', "%{$search}%");
+                });
+            })
+            ->paginate(10);
 
         // $ibu->usia = Carbon::parse($ibu->tgl_lahir)->age;
         // return $ibu;
-        return view('pengukuran_ibuhamil.data', compact('p_ibuhamil'));
+        return view('pengukuran_ibuhamil.data', compact('p_ibuhamil', 'search'));
     }
 
     public function create()

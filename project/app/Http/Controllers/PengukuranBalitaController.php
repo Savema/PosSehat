@@ -11,14 +11,21 @@ use Illuminate\Support\Facades\Http;
 
 class PengukuranBalitaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $search = $request->search;
 
-        $p_balita = PengukuranBalita::with(['balita','petugas'])->get();
+        $p_balita = PengukuranBalita::with(['balita','petugas'])
+            ->when($search, function ($query) use ($search) {
+                $query->whereHas('balita', function ($q) use ($search) {
+                    $q->where('nama', 'like', "%{$search}%");
+                });
+            })
+            ->paginate(10);
 
         // $ibu->usia = Carbon::parse($ibu->tgl_lahir)->age;
         // return $ibu;
-        return view('pengukuran_balita.data', compact('p_balita'));
+        return view('pengukuran_balita.data', compact('p_balita', 'search'));
     }
 
     public function create()

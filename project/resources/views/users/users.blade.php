@@ -22,9 +22,21 @@
                 </a>
             </div>
 
+            <form method="GET" action="{{ route('users.index') }}" class="mb-3">
+                <div class="input-group" style="max-width: 300px;">
+                    <input type="text" name="search" class="form-control" id="search"
+                        placeholder="Cari nama, email, no HP..."
+                        value="{{ request('search') }}">
+
+                    <button class="btn btn-primary" type="submit">
+                        <i class="bi bi-search"></i> Cari
+                    </button>
+                </div>
+            </form>
+
             <!-- Table -->
             <div class="table-responsive">
-                <table class="table table-hover align-middle datatable">
+                <table class="table table-hover align-middle">
                     <thead class="table-light">
                         <tr>
                             <th style="width: 5%">No</th>
@@ -35,10 +47,10 @@
                             <th style="width: 15%" class="text-center">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="user-table">
                         @forelse ($user as $index => $users)
                             <tr>
-                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $user->firstItem() + $index }}</td>
                                 <td>{{ $users->nama }}</td>
                                 <td>{{ $users->no_hp }}</td>
                                 <td>{{ $users->email }}</td>
@@ -78,7 +90,33 @@
                 </table>
             </div>
 
+            <div class="d-flex justify-content-center mt-3">
+                {{ $user->withQueryString()->links() }}
+            </div>
+
         </div>
     </div>
+
+<script>
+let delayTimer;
+
+document.getElementById('search').addEventListener('keyup', function () {
+    clearTimeout(delayTimer);
+
+    let query = this.value;
+
+    delayTimer = setTimeout(() => {
+        fetch(`{{ route('users.index') }}?search=` + query)
+        .then(response => response.text())
+        .then(html => {
+            let parser = new DOMParser();
+            let doc = parser.parseFromString(html, 'text/html');
+
+            let newTable = doc.querySelector('#user-table').innerHTML;
+            document.getElementById('user-table').innerHTML = newTable;
+        });
+    }, 300);
+});
+</script>
 
 @endsection

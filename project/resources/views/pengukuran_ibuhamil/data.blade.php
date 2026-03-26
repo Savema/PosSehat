@@ -22,6 +22,18 @@
                 </a>
             </div>
 
+            <form method="GET" action="{{ route('pengukuran_ibu_hamil.index') }}" class="mb-3">
+                <div class="input-group" style="max-width: 300px;">
+                    <input type="text" name="search" class="form-control" id="search"
+                        placeholder="Cari nama..."
+                        value="{{ request('search') }}">
+
+                    <button class="btn btn-primary" type="submit">
+                        <i class="bi bi-search"></i> Cari
+                    </button>
+                </div>
+            </form>
+
             <!-- Table -->
             <div class="table-responsive">
                 <table class="table table-hover align-middle datatable">
@@ -41,10 +53,10 @@
                             <th style="width: 15%" class="text-center">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="pengukuran-ibuhamil-table">
                         @forelse ($p_ibuhamil as $index => $ibu)
                             <tr>
-                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $p_ibuhamil->firstItem() + $index }}</td>
                                 <td>{{ $ibu->petugas->nama ?? '-' }}</td>
                                 <td>{{ $ibu->tanggal }}</td>
                                 <td>{{ $ibu->ibuHamil->nama ?? '-' }}</td>
@@ -90,7 +102,33 @@
                 </table>
             </div>
 
+            <div class="d-flex justify-content-center mt-3">
+                {{ $p_ibuhamil->withQueryString()->links() }}
+            </div>
+
         </div>
     </div>
+
+<script>
+let delayTimer;
+
+document.getElementById('search').addEventListener('keyup', function () {
+    clearTimeout(delayTimer);
+
+    let query = this.value;
+
+    delayTimer = setTimeout(() => {
+        fetch(`{{ route('pengukuran_ibu_hamil.index') }}?search=` + query)
+        .then(response => response.text())
+        .then(html => {
+            let parser = new DOMParser();
+            let doc = parser.parseFromString(html, 'text/html');
+
+            let newTable = doc.querySelector('#pengukuran-ibuhamil-table').innerHTML;
+            document.getElementById('pengukuran-ibuhamil-table').innerHTML = newTable;
+        });
+    }, 300);
+});
+</script>
 
 @endsection

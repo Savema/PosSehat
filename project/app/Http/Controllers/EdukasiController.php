@@ -7,10 +7,17 @@ use Illuminate\Http\Request;
 
 class EdukasiController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $t_edukasi = Edukasi::latest()->get();
-        return view('edukasi.edukasi', compact('t_edukasi'));
+        $search = $request->search;
+
+        $t_edukasi = Edukasi::query()
+            ->when($search, function ($query) use ($search) {
+                $query->where('judul', 'like', "%{$search}%");
+            })
+            ->paginate(10);
+
+        return view('edukasi.edukasi', compact('t_edukasi', 'search'));
     }
 
     /**

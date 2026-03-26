@@ -22,6 +22,18 @@
                 </a>
             </div>
 
+            <form method="GET" action="{{ route('edukasi.index') }}" class="mb-3">
+                <div class="input-group" style="max-width: 300px;">
+                    <input type="text" name="search" class="form-control" id="search"
+                        placeholder="Cari judul..."
+                        value="{{ request('search') }}">
+
+                    <button class="btn btn-primary" type="submit">
+                        <i class="bi bi-search"></i> Cari
+                    </button>
+                </div>
+            </form>
+
             <!-- Table -->
             <div class="table-responsive">
                 <table class="table table-hover align-middle datatable">
@@ -35,10 +47,10 @@
                             <th style="width: 15%" class="text-center">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="edukasi-table">
                         @forelse ($t_edukasi as $index => $t_edukasis)
                             <tr>
-                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $t_edukasi->firstItem() + $index }}</td>
                                 <td>{{ $t_edukasis->kategori }}</td>
                                 <td>{{ $t_edukasis->judul }}</td>
                                 <td>{{ $t_edukasis->konten }}</td>
@@ -84,7 +96,33 @@
                 </table>
             </div>
 
+            <div class="d-flex justify-content-center mt-3">
+                {{ $t_edukasi->withQueryString()->links() }}
+            </div>
+
         </div>
     </div>
+
+<script>
+let delayTimer;
+
+document.getElementById('search').addEventListener('keyup', function () {
+    clearTimeout(delayTimer);
+
+    let query = this.value;
+
+    delayTimer = setTimeout(() => {
+        fetch(`{{ route('edukasi.index') }}?search=` + query)
+        .then(response => response.text())
+        .then(html => {
+            let parser = new DOMParser();
+            let doc = parser.parseFromString(html, 'text/html');
+
+            let newTable = doc.querySelector('#edukasi-table').innerHTML;
+            document.getElementById('edukasi-table').innerHTML = newTable;
+        });
+    }, 300);
+});
+</script>
 
 @endsection

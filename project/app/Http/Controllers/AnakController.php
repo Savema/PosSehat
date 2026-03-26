@@ -10,10 +10,19 @@ class AnakController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $balita = Anak::latest()->get();
-        return view('balita.data-balita', compact('balita'));
+        // $balita = Anak::latest()->get();
+
+        $search = $request->search;
+
+        $balita = Anak::query()
+            ->when($search, function ($query) use ($search) {
+                $query->where('nama', 'like', "%{$search}%");
+            })
+            ->paginate(10);
+
+        return view('balita.data-balita', compact('balita', 'search'));
     }
 
     /**

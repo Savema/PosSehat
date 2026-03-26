@@ -7,10 +7,17 @@ use Illuminate\Http\Request;
 
 class IbuHamilController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $ibu_hamil = IbuHamil::latest()->get();
-        return view('ibu_hamil.data-ibuhamil', compact('ibu_hamil'));
+        $search = $request->search;
+
+        $ibu_hamil = IbuHamil::query()
+            ->when($search, function ($query) use ($search) {
+                $query->where('nama', 'like', "%{$search}%");
+            })
+            ->paginate(10);
+
+        return view('ibu_hamil.data-ibuhamil', compact('ibu_hamil', 'search'));
     }
 
         public function create()
