@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AnakController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
@@ -9,7 +7,10 @@ use App\Http\Controllers\EdukasiController;
 use App\Http\Controllers\IbuHamilController;
 use App\Http\Controllers\PengukuranBalitaController;
 use App\Http\Controllers\PengukuranIbuHamilController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UsersController;
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,6 +54,11 @@ Route::middleware(['auth'])->group(function () {
 
 Route::middleware(['auth','role:admin'])->group(function () {
     Route::resource('users', UsersController::class);
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
 });
 
 Route::middleware(['auth'])->group(function () {

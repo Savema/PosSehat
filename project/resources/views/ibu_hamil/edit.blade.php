@@ -57,7 +57,7 @@
                   </div>
                 </div>
 
-              </form><!-- End General Form Elements -->
+              </form>
             </div>
           </div>
         </div>

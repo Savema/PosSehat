@@ -150,6 +150,12 @@
       transform: translateY(-5px);
       transition: all 0.3s ease-in-out;
     }
+    .navbar {
+        z-index: 9999 !important; /* Memastikan navbar selalu di depan */
+    }
+    .dropdown-menu {
+        z-index: 10000 !important; /* Memastikan menu dropdown lebih depan lagi */
+    }
   </style>
 </head>
 
@@ -172,6 +178,7 @@
   {{-- JS --}}
 <script src="{{ asset('assets/js/main.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
   @stack('scripts')
 </body>
