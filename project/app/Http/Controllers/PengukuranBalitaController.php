@@ -39,35 +39,37 @@ class PengukuranBalitaController extends Controller
     {
         $request->validate([
             'balita_id'      => 'required',
-            'tanggal'        => 'required',
-            'usia'           => 'required',
-            'jenis_kelamin'  => 'required',
-            'berat_badan'    => 'required',
-            'tinggi_badan'   => 'required',
-            'lingkar_kepala' => 'required',
+            'tanggal'        => 'required|date',
+            'usia'           => 'required|numeric',
+            'jenis_kelamin'  => 'required', // Pastikan valuenya 1 atau 0
+            'berat_badan'    => 'required|numeric',
+            'tinggi_badan'   => 'required|numeric',
+            'lingkar_kepala' => 'required|numeric', // Ini dikirim sebagai LiLA ke Flask
         ]);
 
         try {
-            $response = Http::post('http://127.0.0.1:5000/predict', [
+            // Request ke API Flask
+            $response = Http::timeout(10)->post('http://127.0.0.1:5000/predict', [
                 'JK'     => (int) $request->jenis_kelamin,
                 'Usia'   => (int) $request->usia,
                 'Berat'  => (float) $request->berat_badan,
                 'Tinggi' => (float) $request->tinggi_badan,
-                'LiLA'   => (float) $request->lingkar_kepala,
+                'LiLA'   => (float) $request->lingkar_kepala, // Mapping ke input LiLA di ML
             ]);
 
             if ($response->successful()) {
                 $hasilML = $response->json();
 
+                // Mapping yang konsisten dengan standar WHO & Kemenkes
                 $mapHasil = [
-                    0 => 'Stunting',
-                    1 => 'Risiko Stunting',
+                    0 => 'Sangat Pendek',
+                    1 => 'Pendek',
                     2 => 'Normal'
                 ];
 
                 $teksHasil = $mapHasil[$hasilML['Status_Stunting']] ?? 'Normal';
 
-                // 1. Simpan Pengukuran (Cukup Sekali Saja)
+                // 1. Simpan Pengukuran
                 $pengukuran = PengukuranBalita::create([
                     'balita_id'       => $request->balita_id,
                     'user_id'         => auth()->id() ?? 1,
@@ -81,10 +83,10 @@ class PengukuranBalitaController extends Controller
                     'bmi'             => $request->berat_badan / (($request->tinggi_badan/100) ** 2),
                 ]);
 
-                // 2. Ambil Template Edukasi
+                // 2. Ambil Template Edukasi & Simpan
+                // Gunakan where kategori yang sama dengan $teksHasil
                 $templates = Edukasi::where('kategori', $teksHasil)->get();
 
-                // 3. Simpan ke tabel Edukasi2
                 foreach ($templates as $item) {
                     Edukasi2::create([
                         'balita_id'            => $request->balita_id,
@@ -95,14 +97,13 @@ class PengukuranBalitaController extends Controller
                     ]);
                 }
 
-                return redirect()->route('pengukuran_balita.index')->with('success', 'Berhasil menyimpan data dan edukasi!');
+                return redirect()->route('pengukuran_balita.index')->with('success', "Hasil: $teksHasil. Data dan edukasi berhasil disimpan!");
             }
 
-            // Jika API Flask error
-            dd("Flask Error: " . $response->body());
+            return back()->withErrors(['api' => 'Gagal terhubung ke server prediksi.'])->withInput();
 
         } catch (\Exception $e) {
-            dd("Laravel Error: " . $e->getMessage());
+            return back()->withErrors(['error' => 'Terjadi kesalahan: ' . $e->getMessage()])->withInput();
         }
     }
 

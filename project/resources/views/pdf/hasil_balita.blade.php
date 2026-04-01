@@ -35,9 +35,9 @@
     <div class="info-box">
         <span class="text-bold">Panduan Rentang Z-Score (TB/U):</span><br>
         Z-Score adalah nilai standar WHO untuk mengukur tinggi badan anak dibanding anak seusianya:<br>
-        • <span class="text-bold">Normal:</span> Berada di antara -2 SD sampai +3 SD.<br>
-        • <span class="text-bold">Risiko Stunting:</span> Berada di bawah -2 SD (Kategori Pendek).<br>
-        • <span class="text-bold">Stunting:</span> Berada di bawah -3 SD (Kategori Sangat Pendek).
+        • <span class="text-bold">Normal:</span> -2 SD sampai +3 SD (Tinggi badan sesuai usia).<br>
+        • <span class="text-bold">Pendek (Stunted):</span> -3 SD sampai < -2 SD.<br>
+        • <span class="text-bold">Sangat Pendek (Severely Stunted):</span> Di bawah -3 SD.
     </div>
 
     <table class="table">

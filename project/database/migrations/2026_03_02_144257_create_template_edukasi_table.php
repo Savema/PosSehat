@@ -16,8 +16,8 @@ return new class extends Migration
             $table->string('judul', 100);
             $table->text('konten');
             $table->enum('kategori', [
-                'Resiko stunting',
-                'Stunting',
+                'Sangat Pendek',
+                'Pendek',
                 'Normal',
                 'Ibu hamil gizi kurang',
                 'Ibu hamil gizi normal',

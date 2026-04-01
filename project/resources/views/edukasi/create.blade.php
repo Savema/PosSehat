@@ -25,10 +25,9 @@
                   <div class="col-sm-10">
                     <select name="kategori" class="form-control" required>
                         <option value="">-- Pilih Kategori --</option>
-                        <option value="Resiko Tinggi Stunting">Resiko Stunting Rendah</option>
-                        <option value="Stunting">Stunting</option>
+                        <option value="Sangat Pendek">Sangat Pendek</option>
+                        <option value="Pendek">Pendek</option>
                         <option value="Normal">Normal</option>
-                        <option value="Resiko Gizi Lebih">Resiko Gizi Lebih</option>
 
                         <option value="ibu hamil gizi kurang">Ibu Hamil Gizi Kurang</option>
                         <option value="ibu hamil gizi normal">Ibu Hamil Gizi Normal</option>

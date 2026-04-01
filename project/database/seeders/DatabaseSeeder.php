@@ -13,7 +13,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         \App\Models\User::create([
-            'name' => 'Administrator PosSehat',
+            'nama' => 'Administrator PosSehat',
             'email' => 'admin@gmail.com',
             'password' => \Illuminate\Support\Facades\Hash::make('admin123'), // Password khusus admin
             'role' => 'admin',
