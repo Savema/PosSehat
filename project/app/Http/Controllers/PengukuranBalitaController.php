@@ -54,7 +54,6 @@ class PengukuranBalitaController extends Controller
                 'Usia'   => (int) $request->usia,
                 'Berat'  => (float) $request->berat_badan,
                 'Tinggi' => (float) $request->tinggi_badan,
-                'LiLA'   => (float) $request->lingkar_kepala, // Mapping ke input LiLA di ML
             ]);
 
             if ($response->successful()) {
