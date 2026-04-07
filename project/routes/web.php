@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EdukasiController;
 use App\Http\Controllers\IbuHamilController;
+use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\PengukuranBalitaController;
 use App\Http\Controllers\PengukuranIbuHamilController;
 use App\Http\Controllers\ProfileController;
@@ -80,4 +81,8 @@ Route::get('/pengukuran-balita/{id}/detail',
     ->name('pengukuran_balita.detail');
 
 Route::post('/cetak-balita/{id}', [PengukuranBalitaController::class, 'cetakPdf']);
+
+Route::middleware(['auth','role:admin'])->group(function () {
+Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan');
+});
 
