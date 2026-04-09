@@ -1,95 +1,151 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Laporan Hasil Pengukuran Balita</title>
+    <title>Laporan Hasil Pengukuran Balita - {{ $pengukuran->balita->nama }}</title>
     <style>
-        body { font-family: sans-serif; font-size: 12px; }
-        .header { text-align: center; margin-bottom: 20px; }
-        .table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-        .table th, .table td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        .table th { background-color: #f2f2f2; }
-        .chart-container { text-align: center; margin-top: 20px; }
-        .chart-image { width: 100%; max-width: 600px; border: 1px solid #eee; }
-        .footer { margin-top: 30px; font-style: italic; font-size: 10px; }
-        .badge { padding: 5px 10px; border-radius: 5px; color: white; }
-        .bg-danger { background-color: #dc3545; }
-        .bg-warning { background-color: #ffc107; color: black; }
-        .bg-success { background-color: #28a745; }
-        .info-box {
-            background-color: #f8f9fa;
-            border-left: 5px solid #9c3a5b;
-            padding: 10px;
-            margin-bottom: 15px;
-            font-size: 11px;
-            line-height: 1.4;
+        body { font-family: 'Helvetica', 'Arial', sans-serif; font-size: 12px; color: #333; line-height: 1.6; }
+        .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #FF782D; padding-bottom: 10px; }
+        .header h2 { color: #FF782D; margin: 0; text-transform: uppercase; font-size: 18px; }
+        .header p { margin: 5px 0; color: #777; font-size: 10px; letter-spacing: 1px; }
+
+        .section-title {
+            background-color: #fff5f0;
+            color: #FF782D;
+            padding: 5px 10px;
+            font-weight: bold;
+            border-left: 4px solid #FF782D;
+            margin: 20px 0 10px 0;
         }
-        .text-bold { font-weight: bold; }
+
+        .table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        .table th, .table td { border: 1px solid #eee; padding: 10px; text-align: left; }
+        .table th { background-color: #fafafa; color: #555; width: 30%; }
+
+        .info-box {
+            background-color: #fdfdfd;
+            border: 1px solid #eee;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+
+        .chart-container { text-align: center; margin: 20px 0; padding: 10px; border: 1px solid #f1f1f1; }
+        .chart-image { width: 100%; max-width: 550px; }
+
+        .edukasi-item { margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px dashed #eee; }
+        .edukasi-item strong { color: #FF782D; display: block; margin-bottom: 5px; }
+
+        .rekomendasi {
+            margin-top: 20px;
+            background-color: #fffaf0;
+            border: 1px solid #ffeccb;
+            padding: 15px;
+            border-radius: 8px;
+            color: #856404;
+        }
+
+        .footer {
+            margin-top: 50px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+            text-align: right;
+            font-style: italic;
+            font-size: 9px;
+            color: #999;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            color: white;
+        }
+        .bg-success { background-color: #28a745; }
+        .bg-warning { background-color: #f39c12; }
+        .bg-danger { background-color: #e74c3c; }
     </style>
 </head>
 <body>
     <div class="header">
-        <h2>LAPORAN HASIL PENGUKURAN STUNTING</h2>
-        <p>Aplikasi Possehat - Balita</p>
+        <h2>LAPORAN HASIL PENGUKURAN BALITA</h2>
+        <p>Aplikasi PosSehat Digital - Monitoring Stunting & Gizi Balita</p>
     </div>
 
+    <div class="section-title">Informasi Dasar & Z-Score</div>
     <div class="info-box">
-        <span class="text-bold">Panduan Rentang Z-Score (TB/U):</span><br>
-        Z-Score adalah nilai standar WHO untuk mengukur tinggi badan anak dibanding anak seusianya:<br>
-        • <span class="text-bold">Normal:</span> -2 SD sampai +3 SD (Tinggi badan sesuai usia).<br>
-        • <span class="text-bold">Pendek (Stunted):</span> -3 SD sampai < -2 SD.<br>
-        • <span class="text-bold">Sangat Pendek (Severely Stunted):</span> Di bawah -3 SD.
+        <table class="table" style="margin-bottom: 0;">
+            <tr>
+                <th>Nama Balita</th>
+                <td><strong>{{ $pengukuran->balita->nama }}</strong></td>
+            </tr>
+            <tr>
+                <th>Jenis Kelamin</th>
+                <td>{{ ($pengukuran->balita->jenis_kelamin == '1') ? 'Laki-laki' : 'Perempuan' }}</td>
+            </tr>
+            <tr>
+                <th>Usia Saat Ukur</th>
+                <td>{{ $pengukuran->usia_saat_ukur }} Bulan</td>
+            </tr>
+            <tr>
+                <th>Tanggal Periksa</th>
+                <td>{{ \Carbon\Carbon::parse($pengukuran->tanggal)->translatedFormat('d F Y') }}</td>
+            </tr>
+            <tr>
+                <th>Hasil Pengukuran</th>
+                <td>{{ $pengukuran->tinggi_badan }} cm / {{ $pengukuran->berat_badan }} kg</td>
+            </tr>
+            <tr>
+                <th>Z-Score TB/U</th>
+                <td>{{ number_format($pengukuran->zs_tbu, 2) }} SD</td>
+            </tr>
+            <tr>
+                <th>Status Hasil</th>
+                <td>
+                    @php
+                        $statusClass = match(strtolower($pengukuran->hasil)) {
+                            'normal' => 'bg-success',
+                            'pendek', 'risiko stunting' => 'bg-warning',
+                            'sangat pendek', 'stunting' => 'bg-danger',
+                            default => 'bg-success'
+                        };
+                    @endphp
+                    <span class="status-badge {{ $statusClass }}">{{ strtoupper($pengukuran->hasil) }}</span>
+                </td>
+            </tr>
+        </table>
     </div>
 
-    <table class="table">
-        <tr><th>Nama Balita</th><td>{{ $pengukuran->balita->nama }}</td></tr>
-        <tr>
-            <th>Jenis Kelamin</th>
-            <td>
-                @if($pengukuran->balita->jenis_kelamin == 'L' || $pengukuran->balita->jenis_kelamin == '1')
-                    Laki-laki
-                @else
-                    Perempuan
-                @endif
-            </td>
-        </tr>
-        <tr><th>Usia</th><td>{{ $pengukuran->usia_saat_ukur }} Bulan</td></tr>
-        <tr><th>Tanggal Periksa</th><td>{{ $pengukuran->tanggal }}</td></tr>
-        <tr><th>Tinggi / Berat</th><td>{{ $pengukuran->tinggi_badan }} cm / {{ $pengukuran->berat_badan }} kg</td></tr>
-        <tr><th>Z-Score TB/U</th><td>{{ number_format($pengukuran->zs_tbu, 2) }}</td></tr>
-        <tr>
-            <th>Status Hasil</th>
-            <td><strong>{{ $pengukuran->hasil }}</strong></td>
-        </tr>
-    </table>
-
-    <h3>Grafik Perkembangan</h3>
+    <div class="section-title">Grafik Perkembangan</div>
     <div class="chart-container">
         @if($chartImage)
             <img src="{{ $chartImage }}" class="chart-image">
         @else
-            <p>Grafik tidak tersedia</p>
+            <p style="color: #999;">Data visual grafik tidak tersedia.</p>
         @endif
     </div>
 
-    <h3>Edukasi Kesehatan</h3>
-    @foreach($edukasi as $item)
-        <div style="margin-bottom: 10px;">
-            <strong>{{ $item->judul }}</strong>
-            <p>{{ $item->konten }}</p>
-        </div>
-    @endforeach
-
-    <div style="margin-top: 20px; border: 1px solid #ccc; padding: 10px;">
-        <span class="text-bold">Rekomendasi Petugas:</span><br>
+    <div class="section-title">Rekomendasi & Edukasi</div>
+    <div class="rekomendasi">
+        <strong>Pesan Petugas:</strong><br>
         @if($pengukuran->hasil == 'Normal')
-            Pertahankan pola makan bergizi seimbang dan rutin datang ke Posyandu setiap bulan untuk memantau tumbuh kembang.
+            Balita berada dalam kondisi <strong>Normal</strong>. Pertahankan asupan gizi yang baik dan rutinlah berkunjung ke Posyandu setiap bulan.
         @else
-            Segera konsultasikan hasil ini dengan Tenaga Kesehatan atau Dokter di Puskesmas terdekat untuk penanganan lebih lanjut.
+            Hasil menunjukkan kategori <strong>{{ $pengukuran->hasil }}</strong>. Disarankan untuk segera melakukan konsultasi intensif dengan petugas kesehatan puskesmas terdekat.
         @endif
+    </div>
+
+    <div style="margin-top: 20px;">
+        @foreach($edukasi as $item)
+            <div class="edukasi-item">
+                <strong><i class="bi bi-info-circle"></i> {{ $item->judul }}</strong>
+                {{ $item->konten }}
+            </div>
+        @endforeach
     </div>
 
     <div class="footer">
-        Dicetak pada: {{ date('d-m-Y H:i:s') }} oleh Petugas: {{ $pengukuran->petugas->nama ?? 'Sistem' }}
+        Dicetak pada: {{ date('d-m-Y H:i') }} | Petugas: {{ $pengukuran->petugas->nama ?? 'Sistem PosSehat' }}
     </div>
 </body>
 </html>

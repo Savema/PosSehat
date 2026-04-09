@@ -4,91 +4,83 @@
 
 @section('content')
 
-    <!-- Page Title -->
     <div class="pagetitle mb-4">
-        <h1 style="color: #9c3a5b;">Data Edukasi</h1>
+        <h1 style="color: #FF782D; font-weight: 700;">Data Edukasi</h1>
+        <p class="text-muted">Kelola konten informasi dan tips kesehatan untuk pengguna PosSehat.</p>
     </div>
 
-    <!-- Card -->
-    <div class="card shadow-sm">
-        <div class="card-body">
+    <div class="card shadow-sm border-0" style="border-radius: 20px;">
+        <div class="card-body p-4">
 
-            <!-- Card Header -->
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="card-title mb-0">Daftar Edukasi</h5>
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4">
+                <h5 class="card-title mb-0" style="color: #2c3e50; font-weight: 600;">Daftar Konten Edukasi</h5>
 
-                <a href="{{ route('edukasi.create') }}" class="btn btn-success btn-sm">
-                    <i class="bi bi-plus-circle me-1"></i> Tambah Data Edukasi
-                </a>
+                <div class="mt-3 mt-md-0">
+                    <a href="{{ route('edukasi.create') }}" class="btn btn-orange px-4 py-2 shadow-sm" style="background-color: #FF782D; color: white; border-radius: 10px; font-weight: 500;">
+                        <i class="bi bi-plus-circle me-2"></i> Tambah Edukasi
+                    </a>
+                </div>
             </div>
 
-            <form method="GET" action="{{ route('edukasi.index') }}" class="mb-3">
-                <div class="input-group" style="max-width: 300px;">
-                    <input type="text" name="search" class="form-control" id="search"
-                        placeholder="Cari judul..."
-                        value="{{ request('search') }}">
-
-                    <button class="btn btn-primary" type="submit">
-                        <i class="bi bi-search"></i> Cari
-                    </button>
+            <form method="GET" action="{{ route('edukasi.index') }}" class="mb-4">
+                <div class="input-group search-bar" style="max-width: 400px;">
+                    <span class="input-group-text bg-white border-end-0" style="border-radius: 10px 0 0 10px;">
+                        <i class="bi bi-search" style="color: #FF782D;"></i>
+                    </span>
+                    <input type="text" name="search" class="form-control border-start-0" id="search"
+                        placeholder="Cari judul edukasi..."
+                        value="{{ request('search') }}" style="border-radius: 0 10px 10px 0;">
                 </div>
             </form>
 
-            <!-- Table -->
             <div class="table-responsive">
-                <table class="table table-hover align-middle datatable">
-                    <thead class="table-light">
+                <table class="table table-hover align-middle custom-table">
+                    <thead>
                         <tr>
                             <th style="width: 5%">No</th>
-                            <th>Kategori</th>
-                            <th>Judul</th>
-                            <th>Konten</th>
-                            {{-- <th>Gambar</th> --}}
+                            <th style="width: 15%">Kategori</th>
+                            <th style="width: 25%">Judul</th>
+                            <th style="width: 40%">Ringkasan Konten</th>
                             <th style="width: 15%" class="text-center">Aksi</th>
                         </tr>
                     </thead>
                     <tbody id="edukasi-table">
-                        @forelse ($t_edukasi as $index => $t_edukasis)
+                        @forelse ($t_edukasi as $index => $item)
                             <tr>
-                                <td>{{ $t_edukasi->firstItem() + $index }}</td>
-                                <td>{{ $t_edukasis->kategori }}</td>
-                                <td>{{ $t_edukasis->judul }}</td>
-                                <td>{{ $t_edukasis->konten }}</td>
-                                {{-- <td>
-                                     @if($t_edukasis->gambar)
-                                        <img src="{{ asset('storage/'.$t_edukasis->gambar) }}" width="100">
-                                    @else
-                                        Tidak ada gambar
-                                    @endif
-                                </td> --}}
+                                <td class="fw-bold">{{ $t_edukasi->firstItem() + $index }}</td>
+                                <td>
+                                    <span class="badge {{ strtolower($item->kategori) == 'Sangat Pendek' ? 'bg-danger-light' : 'bg-orange-light' }}">
+                                        {{ $item->kategori }}
+                                    </span>
+                                </td>
+                                <td><span class="fw-semibold text-dark">{{ $item->judul }}</span></td>
+                                <td class="text-muted small">
+                                    {{ Str::limit($item->konten, 80, '...') }}
+                                </td>
                                 <td class="text-center">
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <a href="{{ route('edukasi.edit', $item->id) }}"
+                                        class="btn btn-sm btn-edit-custom" title="Edit">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </a>
 
-                                    <!-- Edit -->
-                                    <a href="{{ route('edukasi.edit', $t_edukasis->id) }}"
-                                    class="btn btn-sm btn-warning me-1" title="Edit">
-                                        <i class="bi bi-pencil-square"></i>
-                                    </a>
-
-                                    <!-- Delete -->
-                                    <form action="{{ route('edukasi.destroy', $t_edukasis->id) }}"
-                                        method="POST"
-                                        style="display:inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button class="btn btn-sm btn-danger"
-                                                onclick="return confirm('Yakin ingin menghapus data?')"
-                                                title="Hapus">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </form>
-
+                                        <form action="{{ route('edukasi.destroy', $item->id) }}" method="POST" style="display:inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="btn btn-sm btn-delete-custom"
+                                                    onclick="return confirm('Yakin ingin menghapus edukasi ini?')"
+                                                    title="Hapus">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
-
                         @empty
                             <tr>
-                                <td colspan="7" class="text-center text-muted">
-                                    Belum ada data edukasi
+                                <td colspan="5" class="text-center py-5 text-muted">
+                                    <i class="bi bi-journal-x d-block mb-2" style="font-size: 3rem; color: #dee2e6;"></i>
+                                    Belum ada data edukasi ditemukan
                                 </td>
                             </tr>
                         @endforelse
@@ -96,33 +88,72 @@
                 </table>
             </div>
 
-            <div class="d-flex justify-content-center mt-3">
-                {{ $t_edukasi->withQueryString()->links() }}
+            <div class="d-flex justify-content-between align-items-center mt-4">
+                <small class="text-muted">Menampilkan {{ $t_edukasi->firstItem() ?? 0 }} sampai {{ $t_edukasi->lastItem() ?? 0 }} dari {{ $t_edukasi->total() }} data</small>
+                <div>
+                    {{ $t_edukasi->withQueryString()->links() }}
+                </div>
             </div>
-
+            
         </div>
     </div>
 
+<style>
+    .custom-table thead { background-color: #f8f9fa; }
+    .custom-table th { color: #7a7a7a; font-weight: 600; text-transform: uppercase; font-size: 11px; letter-spacing: 0.5px; padding: 15px; border: none; }
+    .custom-table td { padding: 15px; border-bottom: 1px solid #f1f1f1; }
+
+    /* Badge Warna Oranye & Merah Soft */
+    .bg-orange-light { background-color: #fff5f0; color: #FF782D; border: 1px solid #ffccbc; border-radius: 6px; }
+    .bg-danger-light { background-color: #fff5f5; color: #fa5252; border: 1px solid #ffc9c9; border-radius: 6px; }
+
+    /* Button Action */
+    .btn-edit-custom { background-color: #fff9db; color: #f59f00; border: none; border-radius: 8px; }
+    .btn-edit-custom:hover { background-color: #f59f00; color: white; }
+    .btn-delete-custom { background-color: #fff5f5; color: #fa5252; border: none; border-radius: 8px; }
+    .btn-delete-custom:hover { background-color: #fa5252; color: white; }
+</style>
+
 <script>
+
 let delayTimer;
 
+
+
 document.getElementById('search').addEventListener('keyup', function () {
+
     clearTimeout(delayTimer);
+
+
 
     let query = this.value;
 
+
+
     delayTimer = setTimeout(() => {
+
         fetch(`{{ route('edukasi.index') }}?search=` + query)
+
         .then(response => response.text())
+
         .then(html => {
+
             let parser = new DOMParser();
+
             let doc = parser.parseFromString(html, 'text/html');
 
+
+
             let newTable = doc.querySelector('#edukasi-table').innerHTML;
+
             document.getElementById('edukasi-table').innerHTML = newTable;
+
         });
+
     }, 300);
+
 });
+
 </script>
 
 @endsection
