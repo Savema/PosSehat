@@ -4,40 +4,40 @@
 
 @section('content')
 
-    <!-- Page Title -->
     <div class="pagetitle mb-4">
-        <h1 style="color: #9c3a5b;">Data Pengguna</h1>
+        <h1 style="color: #FF782D; font-weight: 700;">Data Pengguna</h1>
+        <p class="text-muted">Manajemen data petugas dan administrator sistem PosSehat.</p>
     </div>
 
-    <!-- Card -->
-    <div class="card shadow-sm">
-        <div class="card-body">
+    <div class="card shadow-sm border-0" style="border-radius: 20px;">
+        <div class="card-body p-4">
 
-            <!-- Card Header -->
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="card-title mb-0">Daftar Pengguna</h5>
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4">
+                <div>
+                    <h5 class="card-title mb-0" style="color: #2c3e50; font-weight: 600;">Daftar Pengguna</h5>
+                </div>
 
-                <a href="{{ route('users.create') }}" class="btn btn-success btn-sm">
-                    <i class="bi bi-plus-circle me-1"></i> Tambah Data Petugas
-                </a>
+                <div class="mt-3 mt-md-0">
+                    <a href="{{ route('users.create') }}" class="btn btn-orange px-4 py-2 shadow-sm" style="background-color: #FF782D; color: white; border-radius: 10px; font-weight: 500;">
+                        <i class="bi bi-plus-circle me-2"></i> Tambah Petugas
+                    </a>
+                </div>
             </div>
 
-            <form method="GET" action="{{ route('users.index') }}" class="mb-3">
-                <div class="input-group" style="max-width: 300px;">
-                    <input type="text" name="search" class="form-control" id="search"
+            <form method="GET" action="{{ route('users.index') }}" class="mb-4">
+                <div class="input-group search-bar" style="max-width: 400px;">
+                    <span class="input-group-text bg-white border-end-0" style="border-radius: 10px 0 0 10px;">
+                        <i class="bi bi-search" style="color: #FF782D;"></i>
+                    </span>
+                    <input type="text" name="search" class="form-control border-start-0" id="search"
                         placeholder="Cari nama, email, no HP..."
-                        value="{{ request('search') }}">
-
-                    <button class="btn btn-primary" type="submit">
-                        <i class="bi bi-search"></i> Cari
-                    </button>
+                        value="{{ request('search') }}" style="border-radius: 0 10px 10px 0;">
                 </div>
             </form>
 
-            <!-- Table -->
             <div class="table-responsive">
-                <table class="table table-hover align-middle">
-                    <thead class="table-light">
+                <table class="table table-hover align-middle custom-table">
+                    <thead>
                         <tr>
                             <th style="width: 5%">No</th>
                             <th>Nama</th>
@@ -50,39 +50,46 @@
                     <tbody id="user-table">
                         @forelse ($user as $index => $users)
                             <tr>
-                                <td>{{ $user->firstItem() + $index }}</td>
-                                <td>{{ $users->nama }}</td>
-                                <td>{{ $users->no_hp }}</td>
+                                <td class="fw-bold">{{ $user->firstItem() + $index }}</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-sm me-3">
+                                            <img src="https://ui-avatars.com/api/?name={{ urlencode($users->nama) }}&background=fff5f0&color=FF782D" class="rounded-circle" width="35">
+                                        </div>
+                                        <span class="fw-semibold text-dark">{{ $users->nama }}</span>
+                                    </div>
+                                </td>
+                                <td><i class="bi bi-phone me-1 text-muted"></i> {{ $users->no_hp }}</td>
                                 <td>{{ $users->email }}</td>
-                                <td>{{ $users->role }}</td>
+                                <td>
+                                    <span class="badge {{ $users->role == 'admin' ? 'bg-orange-light' : 'bg-blue-light' }}">
+                                        {{ $users->role }}
+                                    </span>
+                                </td>
                                 <td class="text-center">
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <a href="{{ route('users.edit', $users->id) }}"
+                                        class="btn btn-sm btn-edit-custom" title="Edit">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </a>
 
-                                    <!-- Edit -->
-                                    <a href="{{ route('users.edit', $users->id) }}"
-                                    class="btn btn-sm btn-warning me-1" title="Edit">
-                                        <i class="bi bi-pencil-square"></i>
-                                    </a>
-
-                                    <!-- Delete -->
-                                    <form action="{{ route('users.destroy', $users->id) }}"
-                                        method="POST"
-                                        style="display:inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button class="btn btn-sm btn-danger"
-                                                onclick="return confirm('Yakin ingin menghapus data?')"
-                                                title="Hapus">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </form>
-
+                                        <form action="{{ route('users.destroy', $users->id) }}" method="POST" style="display:inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="btn btn-sm btn-delete-custom"
+                                                    onclick="return confirm('Yakin ingin menghapus data petugas ini?')"
+                                                    title="Hapus">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
-
                         @empty
                             <tr>
-                                <td colspan="7" class="text-center text-muted">
-                                    Belum ada data petugas
+                                <td colspan="6" class="text-center py-5 text-muted">
+                                    <i class="bi bi-person-x d-block mb-2" style="font-size: 3rem; color: #dee2e6;"></i>
+                                    Belum ada data petugas yang ditemukan
                                 </td>
                             </tr>
                         @endforelse
@@ -90,12 +97,73 @@
                 </table>
             </div>
 
-            <div class="d-flex justify-content-center mt-3">
-                {{ $user->withQueryString()->links() }}
+            <div class="d-flex justify-content-between align-items-center mt-4">
+                <small class="text-muted">Menampilkan {{ $user->firstItem() ?? 0 }} sampai {{ $user->lastItem() ?? 0 }} dari {{ $user->total() }} data</small>
+                <div>
+                    {{ $user->withQueryString()->links() }}
+                </div>
             </div>
 
         </div>
     </div>
+
+<style>
+    /* Table Styling */
+    .custom-table thead {
+        background-color: #f8f9fa;
+    }
+    .custom-table th {
+        color: #7a7a7a;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 12px;
+        letter-spacing: 0.5px;
+        border-top: none;
+        padding: 15px;
+    }
+    .custom-table td {
+        padding: 15px;
+        color: #555;
+    }
+
+    /* Badge Styling */
+    .bg-orange-light {
+        background-color: #fff5f0;
+        color: #FF782D;
+        border: 1px solid #ffccbc;
+    }
+    .bg-blue-light {
+        background-color: #e3f2fd;
+        color: #1976d2;
+        border: 1px solid #bbdefb;
+    }
+
+    /* Action Buttons */
+    .btn-edit-custom {
+        background-color: #fff9db;
+        color: #f59f00;
+        border: none;
+    }
+    .btn-edit-custom:hover {
+        background-color: #f59f00;
+        color: white;
+    }
+    .btn-delete-custom {
+        background-color: #fff5f5;
+        color: #fa5252;
+        border: none;
+    }
+    .btn-delete-custom:hover {
+        background-color: #fa5252;
+        color: white;
+    }
+
+    /* Form Control Focus */
+    .form-control:focus {
+        border-color: #FF782D;
+        box-shadow: 0 0 0 0.2rem rgba(255, 120, 45, 0.25);
+    }
+</style>
 
 <script>
 let delayTimer;

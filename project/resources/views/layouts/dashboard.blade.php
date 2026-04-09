@@ -29,7 +29,7 @@
       zoom: 1 !important;
       transform: none !important;
       font-size: 1rem;
-      background-color: #fff7f2;
+      background-color: #f8f9fa;
       font-family: 'Segoe UI', sans-serif;
     }
 
@@ -105,18 +105,18 @@
     }
 
     .footer {
-      background-color: #d47c64;
-      color: #fff;
-      padding: 40px 0;
+        margin-top: 30px;
+        text-align: center;
+        font-size: 14px;
     }
 
-    .footer a {
-      color: #fff;
-      text-decoration: none;
+    .footer .copyright span {
+        font-weight: 700;
     }
 
-    .footer a:hover {
-      color: #fff;
+    .footer .credits {
+        padding-top: 5px;
+        font-style: italic;
     }
 
     .circle-background {
@@ -153,8 +153,67 @@
     .navbar {
         z-index: 9999 !important; /* Memastikan navbar selalu di depan */
     }
+    /* Efek hover pada item dropdown */
+    .dropdown-item:hover {
+        background-color: #fff5f0 !important;
+        color: #FF782D !important;
+    }
+
+    /* Biar transisi dropdown lebih halus */
     .dropdown-menu {
-        z-index: 10000 !important; /* Memastikan menu dropdown lebih depan lagi */
+        animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    /* --- Sidebar Styling --- */
+    .sidebar {
+        background-color: #ffffff;
+        padding: 20px 15px;
+    }
+
+    .sidebar-nav .nav-item {
+        margin-bottom: 8px;
+    }
+
+    /* Link Default (Saat Tidak Aktif) */
+    .sidebar-nav .nav-link.collapsed {
+            background: transparent;
+            color: #7a7a7a; /* Warna teks agak abu agar tidak ramai */
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+    .sidebar-nav .nav-link.collapsed i {
+        color: #FF782D; /* Ikon tetap oranye sebagai identitas */
+    }
+
+    /* Link Saat Aktif atau Di-Hover */
+    .sidebar-nav .nav-link {
+        background: #FFF5F0; /* Background oranye sangat muda */
+        color: #FF782D;      /* Teks oranye */
+        font-weight: 600;
+        border-radius: 12px;
+        padding: 12px 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .sidebar-nav .nav-link i {
+        font-size: 1.2rem;
+        color: #FF782D;
+    }
+
+    .sidebar-nav .nav-link:hover {
+        background: #FF782D; /* Saat hover jadi oranye penuh */
+        color: #ffffff;      /* Teks jadi putih */
+    }
+
+    .sidebar-nav .nav-link:hover i {
+        color: #ffffff;      /* Ikon jadi putih saat hover */
     }
   </style>
 </head>

@@ -4,40 +4,40 @@
 
 @section('content')
 
-    <!-- Page Title -->
     <div class="pagetitle mb-4">
-        <h1 style="color: #9c3a5b;">Data Ibu Hamil</h1>
+        <h1 style="color: #FF782D; font-weight: 700;">Data Ibu Hamil</h1>
+        <p class="text-muted">Manajemen data ibu hamil PosSehat.</p>
     </div>
 
-    <!-- Card -->
-    <div class="card shadow-sm">
-        <div class="card-body">
+    <div class="card shadow-sm border-0" style="border-radius: 20px;">
+        <div class="card-body p-4">
 
-            <!-- Card Header -->
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="card-title mb-0">Daftar Ibu Hamil</h5>
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4">
+                <div>
+                    <h5 class="card-title mb-0" style="color: #2c3e50; font-weight: 600;">Daftar Ibu Hamil</h5>
+                </div>
 
-                <a href="{{ route('ibu_hamil.create') }}" class="btn btn-success btn-sm">
-                    <i class="bi bi-plus-circle me-1"></i> Tambah Data Ibu Hamil
-                </a>
+                <div class="mt-3 mt-md-0">
+                    <a href="{{ route('ibu_hamil.create') }}" class="btn btn-orange px-4 py-2 shadow-sm" style="background-color: #FF782D; color: white; border-radius: 10px; font-weight: 500;">
+                        <i class="bi bi-plus-circle me-2"></i> Tambah Ibu Hamil
+                    </a>
+                </div>
             </div>
 
-            <form method="GET" action="{{ route('ibu_hamil.index') }}" class="mb-3">
-                <div class="input-group" style="max-width: 300px;">
-                    <input type="text" name="search" class="form-control" id="search"
+            <form method="GET" action="{{ route('ibu_hamil.index') }}" class="mb-4">
+                <div class="input-group search-bar" style="max-width: 400px;">
+                    <span class="input-group-text bg-white border-end-0" style="border-radius: 10px 0 0 10px;">
+                        <i class="bi bi-search" style="color: #FF782D;"></i>
+                    </span>
+                    <input type="text" name="search" class="form-control border-start-0" id="search"
                         placeholder="Cari nama..."
-                        value="{{ request('search') }}">
-
-                    <button class="btn btn-primary" type="submit">
-                        <i class="bi bi-search"></i> Cari
-                    </button>
+                        value="{{ request('search') }}" style="border-radius: 0 10px 10px 0;">
                 </div>
             </form>
 
-            <!-- Table -->
             <div class="table-responsive">
-                <table class="table table-hover align-middle datatable">
-                    <thead class="table-light">
+                <table class="table table-hover align-middle custom-table">
+                    <thead>
                         <tr>
                             <th style="width: 5%">No</th>
                             <th>Nama</th>
@@ -50,39 +50,43 @@
                     <tbody id="ibu-hamil-table">
                         @forelse ($ibu_hamil as $index => $ibu_hamils)
                             <tr>
-                                <td>{{ $ibu_hamil->firstItem() + $index }}</td>
-                                <td>{{ $ibu_hamils->nama }}</td>
+                                <td class="fw-bold">{{ $ibu_hamil->firstItem() + $index }}</td>
+                                <td>{{ $ibu_hamils->nik }}</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-sm me-3">
+                                            <img src="https://ui-avatars.com/api/?name={{ urlencode($ibu_hamils->nama) }}&background=fff5f0&color=FF782D" class="rounded-circle" width="35">
+                                        </div>
+                                        <span class="fw-semibold text-dark">{{ $ibu_hamils->nama }}</span>
+                                    </div>
+                                </td>
                                 <td>{{ $ibu_hamils->tgl_lahir }}</td>
                                 <td>{{ $ibu_hamils->alamat }}</td>
                                 <td>{{ $ibu_hamils->no_hp }}</td>
                                 <td class="text-center">
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <a href="{{ route('ibu_hamil.edit', $ibu_hamils->id) }}"
+                                        class="btn btn-sm btn-edit-custom" title="Edit">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </a>
 
-                                    <!-- Edit -->
-                                    <a href="{{ route('ibu_hamil.edit', $ibu_hamils->id) }}"
-                                    class="btn btn-sm btn-warning me-1" title="Edit">
-                                        <i class="bi bi-pencil-square"></i>
-                                    </a>
-
-                                    <!-- Delete -->
-                                    <form action="{{ route('ibu_hamil.destroy', $ibu_hamils->id) }}"
-                                        method="POST"
-                                        style="display:inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button class="btn btn-sm btn-danger"
-                                                onclick="return confirm('Yakin ingin menghapus data?')"
-                                                title="Hapus">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </form>
-
+                                        <form action="{{ route('ibu_hamil.destroy', $ibu_hamils->id) }}" method="POST" style="display:inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="btn btn-sm btn-delete-custom"
+                                                    onclick="return confirm('Yakin ingin menghapus data ibu hamil ini?')"
+                                                    title="Hapus">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
-
                         @empty
                             <tr>
-                                <td colspan="7" class="text-center text-muted">
-                                    Belum ada data ibu hamil
+                                <td colspan="6" class="text-center py-5 text-muted">
+                                    <i class="bi bi-person-x d-block mb-2" style="font-size: 3rem; color: #dee2e6;"></i>
+                                    Belum ada data ibu hamil yang ditemukan
                                 </td>
                             </tr>
                         @endforelse
@@ -90,12 +94,98 @@
                 </table>
             </div>
 
-            <div class="d-flex justify-content-center mt-3">
-                {{ $ibu_hamil->withQueryString()->links() }}
+            <div class="d-flex justify-content-between align-items-center mt-4">
+                <small class="text-muted">Menampilkan {{ $ibu_hamil->firstItem() ?? 0 }} sampai {{ $ibu_hamil->lastItem() ?? 0 }} dari {{ $ibu_hamil->total() }} data</small>
+                <div>
+                    {{ $ibu_hamil->withQueryString()->links() }}
+                </div>
             </div>
 
         </div>
     </div>
+
+<style>
+    /* Table Styling */
+    .custom-table thead {
+        background-color: #f8f9fa;
+    }
+    .custom-table th {
+        color: #7a7a7a;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 12px;
+        letter-spacing: 0.5px;
+        border-top: none;
+        padding: 15px;
+    }
+    .custom-table td {
+        padding: 15px;
+        color: #555;
+    }
+
+    /* Badge Styling */
+    .bg-orange-light {
+        background-color: #fff5f0;
+        color: #FF782D;
+        border: 1px solid #ffccbc;
+    }
+    .bg-blue-light {
+        background-color: #e3f2fd;
+        color: #1976d2;
+        border: 1px solid #bbdefb;
+    }
+
+    /* Action Buttons */
+    .btn-edit-custom {
+        background-color: #fff9db;
+        color: #f59f00;
+        border: none;
+    }
+    .btn-edit-custom:hover {
+        background-color: #f59f00;
+        color: white;
+    }
+    .btn-delete-custom {
+        background-color: #fff5f5;
+        color: #fa5252;
+        border: none;
+    }
+    .btn-delete-custom:hover {
+        background-color: #fa5252;
+        color: white;
+    }
+
+    /* Form Control Focus */
+    .form-control:focus {
+        border-color: #FF782D;
+        box-shadow: 0 0 0 0.2rem rgba(255, 120, 45, 0.25);
+    }
+    /* Badge Laki-laki (Biru Lembut) */
+    .bg-blue-light {
+        background-color: #e7f3ff; /* Biru sangat muda */
+        color: #007bff;            /* Teks biru */
+        border: 1px solid #cfe2ff;
+        padding: 6px 12px;
+        border-radius: 8px;
+        font-weight: 600;
+    }
+
+    /* Badge Perempuan (Merah Muda Lembut) */
+    .bg-pink-light {
+        background-color: #fff0f3; /* Pink sangat muda */
+        color: #ff4d6d;            /* Teks pink/merah muda */
+        border: 1px solid #ffccd5;
+        padding: 6px 12px;
+        border-radius: 8px;
+        font-weight: 600;
+    }
+
+    /* Efek hover agar interaktif */
+    .badge:hover {
+        opacity: 0.8;
+        cursor: default;
+    }
+</style>
 
 <script>
 let delayTimer;
@@ -120,3 +210,6 @@ document.getElementById('search').addEventListener('keyup', function () {
 </script>
 
 @endsection
+
+
+

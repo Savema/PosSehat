@@ -1,12 +1,8 @@
-<footer id="footer" class="footer">
-    <div class="copyright">
-      &copy; Copyright <strong><span>NiceAdmin</span></strong>. All Rights Reserved
+<footer id="footer" class="footer" style="background: transparent; padding: 20px 0; border-top: 1px solid #fff5f0;">
+    <div class="copyright" style="color: #7a7a7a;">
+      &copy; {{ date('Y') }} <strong><span style="color: #FF782D;">PosSehat</span></strong>. All Rights Reserved
     </div>
-    <div class="credits">
-      <!-- All the links in the footer should remain intact. -->
-      <!-- You can delete the links only if you purchased the pro version. -->
-      <!-- Licensing information: https://bootstrapmade.com/license/ -->
-      <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-      Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+    <div class="credits" style="font-size: 13px; color: #b5b5b5;">
+      Sistem Monitoring Kesehatan & Nutrisi Digital
     </div>
-  </footer><!-- End Footer -->
+</footer>

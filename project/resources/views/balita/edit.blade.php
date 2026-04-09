@@ -1,81 +1,119 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Edit Data Balita')
+@section('title', ' Edit Data Balita')
 
 @section('content')
 
     <div class="pagetitle mb-4">
-        <h1 style="color: #9c3a5b;">Edit Data Balita</h1>
+        <h1 style="color: #FF782D; font-weight: 700;">Edit Data Balita</h1>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ route('balita.index') }}">Data Balita</a></li>
+                <li class="breadcrumb-item active">Edit Balita</li>
+            </ol>
+        </nav>
     </div>
 
     <section class="section">
-      <div class="row">
-        <div class="col-lg-10">
+      <div class="row justify-content-center">
+        <div class="col-lg-9"> <div class="card shadow-sm border-0" style="border-radius: 20px;">
+            <div class="card-body p-4">
+              <div class="d-flex align-items-center mb-4">
+                  <div class="icon-box me-3" style="background: #fff5f0; padding: 10px; border-radius: 12px;">
+                      <i class="bi bi-baby-carriage" style="color: #FF782D; font-size: 1.5rem;"></i>
+                  </div>
+                  <h5 class="card-title mb-0" style="color: #2c3e50; font-weight: 600;">Edit Data Balita</h5>
+              </div>
 
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Edit Data Balita</h5>
-
-              <!-- General Form Elements -->
               <form action="{{ route('balita.update', $balita->id) }}" method="POST">
                 @csrf
                 @method('PUT')
-                <div class="row mb-3">
-                  <label for="nik" class="col-sm-2 col-form-label">NIK</label>
-                  <div class="col-sm-10">
-                    <input type="text" class="form-control" name="nik" value="{{ $balita->nik }}">
-                  </div>
-                </div>
-                <div class="row mb-3">
-                  <label for="nama" class="col-sm-2 col-form-label">Nama Balita</label>
-                  <div class="col-sm-10">
-                    <input type="text" class="form-control" name="nama" value="{{ $balita->nama }}">
-                  </div>
-                </div>
-                <div class="row mb-3">
-                  <label for="jenis_kelamin" class="col-sm-2 col-form-label">Jenis Kelamin</label>
-                  <div class="col-sm-10">
-                    <select name="jenis_kelamin" class="form-control">
-                        <option value="1" {{ $balita->jenis_kelamin == 1 ? 'selected' : '' }}>
-                            Laki-laki
-                        </option>
 
-                        <option value="0" {{ $balita->jenis_kelamin == 0 ? 'selected' : '' }}>
-                            Perempuan
-                        </option>
-                    </select>
-                  </div>
-                </div>
-                <div class="row mb-3">
-                  <label for="tgl_lahir" class="col-sm-2 col-form-label">Tanggal Lahir</label>
-                  <div class="col-sm-10">
-                    <input type="date" class="form-control" name="tgl_lahir" value="{{ $balita->tgl_lahir }}">
-                  </div>
-                </div>
-                <div class="row mb-3">
-                  <label for="nama_ortu" class="col-sm-2 col-form-label">Nama Ortu</label>
-                  <div class="col-sm-10">
-                    <input type="text" class="form-control" name="nama_ortu" value="{{ $balita->nama_ortu }}">
-                  </div>
-                </div>
-                <div class="row mb-3">
-                  <label for="alamat" class="col-sm-2 col-form-label">Alamat</label>
-                  <div class="col-sm-10">
-                    <input type="text" class="form-control" name="alamat" value="{{ $balita->alamat }}">
-                  </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold">NIK Balita</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0"><i class="bi bi-card-text text-muted"></i></span>
+                            <input type="text" class="form-control border-start-0 custom-input" name="nik"  value="{{ $balita->nik }}">
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold">Nama Lengkap Balita</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0"><i class="bi bi-person text-muted"></i></span>
+                            <input type="text" class="form-control border-start-0 custom-input" name="nama" value="{{ $balita->nama }}">
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold">Jenis Kelamin</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0">
+                                <i class="bi bi-gender-ambiguous text-muted"></i>
+                            </span>
+                            <select name="jenis_kelamin" class="form-select border-start-0 custom-input" required>
+                                <option value="" disabled>-- Pilih Jenis Kelamin --</option>
+
+                                <option value="1" {{ (old('jenis_kelamin', $balita->jenis_kelamin) == '1') ? 'selected' : '' }}>
+                                    Laki-laki
+                                </option>
+
+                                <option value="0" {{ (old('jenis_kelamin', $balita->jenis_kelamin) == '0') ? 'selected' : '' }}>
+                                    Perempuan
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold">Tanggal Lahir</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0"><i class="bi bi-calendar-event text-muted"></i></span>
+                            <input type="date" class="form-control border-start-0 custom-input" name="tgl_lahir" value="{{ $balita->tgl_lahir }}">
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+                        <label class="form-label fw-semibold">Nama Orang Tua / Wali</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0"><i class="bi bi-people text-muted"></i></span>
+                            <input type="text" class="form-control border-start-0 custom-input" name="nama_ortu" value="{{ $balita->nama_ortu }}">
+                        </div>
+                    </div>
+
+                    <div class="col-md-12 mb-4">
+                        <label class="form-label fw-semibold">Alamat Lengkap</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0">
+                                <i class="bi bi-geo-alt text-muted"></i>
+                            </span>
+                            <textarea class="form-control border-start-0 custom-input" name="alamat" rows="2">{{ old('alamat', $balita->alamat) }}</textarea>
+                        </div>
+                    </div>
                 </div>
 
-                 <div class="row mb-3">
-                  <div class="col-sm-10">
-                    <button type="submit" class="btn btn-primary">Submit Form</button>
-                  </div>
+                <div class="d-flex justify-content-end gap-2 border-top pt-4">
+                    <a href="{{ route('balita.index') }}" class="btn btn-light px-4" style="border-radius: 10px;">Batal</a>
+                    <button type="submit" class="btn btn-orange px-4" style="background-color: #FF782D; color: white; border-radius: 10px; font-weight: 600; border: none;">
+                        <i class="bi bi-save me-2"></i>Simpan Data Balita
+                    </button>
                 </div>
 
-              </form><!-- End General Form Elements -->
+              </form>
             </div>
           </div>
         </div>
       </div>
     </section>
+
+<style>
+    .custom-input:focus {
+        border-color: #FF782D !important;
+        box-shadow: 0 0 0 0.25rem rgba(255, 120, 45, 0.1) !important;
+    }
+    .input-group-text { border-radius: 10px 0 0 10px !important; }
+    .custom-input { border-radius: 0 10px 10px 0 !important; }
+</style>
 
 @endsection
