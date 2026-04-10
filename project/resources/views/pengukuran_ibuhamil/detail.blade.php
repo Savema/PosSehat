@@ -1,90 +1,117 @@
 @extends('layouts.dashboard')
 
-@section('title','Detail Edukasi Ibu Hamil')
+@section('title','Detail Perkembangan Ibu Hamil')
 
 @section('content')
 
-<div class="pagetitle">
-    <h1>Detail Edukasi</h1>
+<div class="pagetitle mb-4">
+    <h1 style="color: #FF782D; font-weight: 700;">Laporan Kesehatan Ibu Hamil</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ route('pengukuran_ibu_hamil.index') }}">Data Pengukuran</a></li>
+            <li class="breadcrumb-item active">Detail Laporan</li>
+        </ol>
+    </nav>
 </div>
 
+<section class="section">
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="card shadow-sm border-0 mb-4" style="border-radius: 20px;">
+                <div class="card-body pt-4">
+                    <div class="text-center mb-4">
+                        <div class="d-inline-flex align-items-center justify-content-center bg-orange-light rounded-circle mb-3" style="width: 80px; height: 80px;">
+                            <i class="bi bi-person-heart" style="font-size: 2.5rem; color: #FF782D;"></i>
+                        </div>
+                        <h4 class="fw-bold text-dark mb-0">{{ $pengukuran->ibuHamil->nama ?? '-' }}</h4>
+                        <span class="text-muted">{{ \Carbon\Carbon::parse($pengukuran->ibuHamil->tgl_lahir)->age ?? '-' }} Tahun</span>
+                    </div>
 
-    <section class="section">
-      <div class="row align-items-top">
-        <div class="col-lg-13">
+                    <div class="status-box p-3 rounded-4 mb-3 text-center" style="background-color: #f8f9fa;">
+                        <small class="text-uppercase fw-bold text-muted d-block mb-1">Status Gizi (IMT)</small>
+                        @php
+                            $statusClass = match(strtolower($pengukuran->status_gizi)) {
+                                'normal' => 'bg-success',
+                                'gizi kurang' => 'bg-danger',
+                                'gizi lebih', 'obesitas' => 'bg-warning text-dark',
+                                default => 'bg-secondary'
+                            };
+                        @endphp
+                        <span class="badge {{ $statusClass }} fs-6 px-4 py-2" style="border-radius: 10px;">
+                            {{ strtoupper($pengukuran->status_gizi) }}
+                        </span>
+                    </div>
 
-            <!-- Default Card -->
-            <div class="card">
-                <div class="card-body">
-                    <form id="formPdf" action="/cetak-ibu-hamil/{{ $pengukuran->id }}" method="POST">
+                    <ul class="list-group list-group-flush small">
+                        <li class="list-group-item d-flex justify-content-between px-0">
+                            <span class="text-muted">Usia Kehamilan:</span>
+                            <span class="fw-bold text-orange">{{ $pengukuran->usia_kehamilan }} Minggu</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between px-0">
+                            <span class="text-muted">Nilai IMT:</span>
+                            <span class="fw-bold">{{ $pengukuran->imt }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between px-0">
+                            <span class="text-muted">LILA:</span>
+                            <span class="fw-bold">{{ $pengukuran->lila }} cm</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between px-0">
+                            <span class="text-muted">BB / TB:</span>
+                            <span class="fw-bold">{{ $pengukuran->berat_badan }}kg / {{ $pengukuran->tinggi_badan }}cm</span>
+                        </li>
+                    </ul>
+
+                    <form id="formPdf" action="/cetak-ibu-hamil/{{ $pengukuran->id }}" method="POST" class="mt-4">
                         @csrf
-
                         <input type="hidden" name="chartImage" id="chartImage">
-
-                        <button type="submit" class="btn btn-danger">
-                            Cetak PDF
+                        <button type="submit" class="btn btn-danger w-100 py-2 shadow-sm" style="border-radius: 12px;">
+                            <i class="bi bi-file-pdf me-2"></i> Cetak Laporan PDF
                         </button>
                     </form>
+                </div>
+            </div>
+        </div>
 
-                    <h5 class="card-title">Hasil Pengukuran</h5>
-
-                    <!-- Table -->
-            <div class="table-responsive">
-                <table class="table table-hover align-middle datatable">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Petugas</th>
-                            <th>Tanggal</th>
-                            <th>Nama</th>
-                            <th>Usia</th>
-                            <th>Berat Badan</th>
-                            <th>Tinggi Badan</th>
-                            <th>Lila</th>
-                            <th>Usia Kehamilan</th>
-                            <th>IMT</th>
-                            <th>Status Gizi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                            <tr>
-                                <td>{{ $pengukuran->petugas->nama ?? '-' }}</td>
-                                <td>{{ $pengukuran->tanggal }}</td>
-                                <td>{{ $pengukuran->ibuHamil->nama ?? '-' }}</td>
-                                <td>{{ \Carbon\Carbon::parse($pengukuran->ibuHamil->tgl_lahir)->age ?? '-' }}</td>
-                                <td>{{ $pengukuran->berat_badan }}</td>
-                                <td>{{ $pengukuran->tinggi_badan }}</td>
-                                <td>{{ $pengukuran->lila }}</td>
-                                <td class="text-center">{{ $pengukuran->usia_kehamilan }}</td>
-                                <td>{{ $pengukuran->imt }}</td>
-                                <td>{{ $pengukuran->status_gizi }}</td>
-                            </tr>
-                    </tbody>
-                </table>
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0 mb-4" style="border-radius: 20px;">
+                <div class="card-body">
+                    <h5 class="card-title" style="color: #2c3e50;"><i class="bi bi-activity me-2 text-orange"></i>Grafik BB & IMT</h5>
+                    <div id="grafikIbuHamil"></div>
+                </div>
             </div>
 
-            <!-- Grafik Perkembangan -->
-            <h5 class="card-title">Grafik Perkembangan Pengukuran Ibu Hamil</h5>
-
-            <div id="grafikIbuHamil" style="min-height:350px;"></div>
-            <hr>
-
-            <h5 class="card-title">Edukasi dan Informasi Kesehatan</h5>
-                    <div class="edukasi-content p-3 bg-light rounded">
+            <div class="card shadow-sm border-0" style="border-radius: 20px;">
+                <div class="card-body">
+                    <h5 class="card-title" style="color: #2c3e50;"><i class="bi bi-lightbulb me-2 text-warning"></i>Saran Kesehatan Ibu</h5>
+                    <div class="edukasi-content mt-2">
                         @forelse($edukasi as $item)
-                            <div class="mb-3">
-                                <h6 class="fw-bold text-primary"><i class="bi bi-info-circle-fill me-2"></i>{{ $item->judul }}</h6>
-                                <p class="mb-0">{{ $item->konten }}</p>
+                            <div class="d-flex align-items-start p-3 mb-3 border-0 shadow-sm rounded-4" style="background-color: #fffaf0;">
+                                <div class="icon-circle me-3" style="color: #FF782D;">
+                                    <i class="bi bi-info-circle-fill fs-4"></i>
+                                </div>
+                                <div>
+                                    <h6 class="fw-bold mb-1" style="color: #FF782D;">{{ $item->judul }}</h6>
+                                    <p class="mb-0 text-muted small" style="line-height: 1.6;">{{ $item->konten }}</p>
+                                </div>
                             </div>
                         @empty
-                            <p class="text-danger">Edukasi belum tersedia untuk kategori ini.</p>
+                            <div class="alert alert-light border-0 text-center py-4">
+                                <i class="bi bi-info-circle d-block mb-2 fs-2 text-muted"></i>
+                                <p class="text-muted mb-0">Edukasi belum tersedia untuk kategori gizi ini.</p>
+                            </div>
                         @endforelse
                     </div>
-            </div><!-- End Default Card -->
+                </div>
+            </div>
         </div>
-      </div>
-    </section>
-</div>
-</div>
+    </div>
+</section>
+
+<style>
+    .bg-orange-light { background-color: #fff5f0; }
+    .text-orange { color: #FF782D; }
+    .rounded-4 { border-radius: 1rem !important; }
+</style>
 
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script>
