@@ -41,68 +41,68 @@ class PengukuranBalitaController extends Controller
             'balita_id'      => 'required',
             'tanggal'        => 'required|date',
             'usia'           => 'required|numeric',
-            'jenis_kelamin'  => 'required', // Pastikan valuenya 1 atau 0
+            'jenis_kelamin'  => 'required',
             'berat_badan'    => 'required|numeric',
             'tinggi_badan'   => 'required|numeric',
-            'lingkar_kepala' => 'required|numeric', // Ini dikirim sebagai LiLA ke Flask
+            'lingkar_kepala' => 'required|numeric',
         ]);
 
         try {
-            // Request ke API Flask
+            // Request ke Flask API
             $response = Http::timeout(10)->post('http://127.0.0.1:5000/predict', [
-                'JK'     => (int) $request->jenis_kelamin,
-                'Usia'   => (int) $request->usia,
-                'Berat'  => (float) $request->berat_badan,
-                'Tinggi' => (float) $request->tinggi_badan,
+                'JK'         => (int) $request->jenis_kelamin,
+                'Usia_Bulan' => (int) $request->usia,        // ← diperbaiki
+                'Berat'      => (float) $request->berat_badan,
+                'Tinggi'     => (float) $request->tinggi_badan,
             ]);
 
             if ($response->successful()) {
                 $hasilML = $response->json();
 
-                // Mapping yang konsisten dengan standar WHO & Kemenkes
-                $mapHasil = [
-                    0 => 'Sangat Pendek',
-                    1 => 'Pendek',
-                    2 => 'Normal'
-                ];
+                // Ambil hasil dari struktur response Flask
+                $teksHasil = $hasilML['data']['hasil']['Status_Stunting'];
+                $zs_tbu    = $hasilML['data']['hasil']['ZS_TBU'];
+                $bmi       = $request->berat_badan / (($request->tinggi_badan / 100) ** 2);
 
-                $teksHasil = $mapHasil[$hasilML['Status_Stunting']] ?? 'Normal';
-
-                // 1. Simpan Pengukuran
+                // Simpan pengukuran
                 $pengukuran = PengukuranBalita::create([
-                    'balita_id'       => $request->balita_id,
-                    'user_id'         => auth()->id() ?? 1,
-                    'berat_badan'     => $request->berat_badan,
-                    'tinggi_badan'    => $request->tinggi_badan,
-                    'lingkar_kepala'  => $request->lingkar_kepala,
-                    'usia_saat_ukur'  => $request->usia,
-                    'tanggal'         => $request->tanggal,
-                    'hasil'           => $teksHasil,
-                    'zs_tbu'          => $hasilML['Zscore'],
-                    'bmi'             => $request->berat_badan / (($request->tinggi_badan/100) ** 2),
+                    'balita_id'      => $request->balita_id,
+                    'user_id'        => auth()->id(),
+                    'berat_badan'    => $request->berat_badan,
+                    'tinggi_badan'   => $request->tinggi_badan,
+                    'lingkar_kepala' => $request->lingkar_kepala,
+                    'usia_saat_ukur' => $request->usia,
+                    'tanggal'        => $request->tanggal,
+                    'hasil'          => $teksHasil,
+                    'zs_tbu'         => $zs_tbu,
+                    'bmi'            => round($bmi, 2),
                 ]);
 
-                // 2. Ambil Template Edukasi & Simpan
-                // Gunakan where kategori yang sama dengan $teksHasil
+                // Ambil & simpan edukasi sesuai hasil stunting
                 $templates = Edukasi::where('kategori', $teksHasil)->get();
-
                 foreach ($templates as $item) {
                     Edukasi2::create([
                         'balita_id'            => $request->balita_id,
                         'pengukuran_balita_id' => $pengukuran->id,
                         'judul'                => $item->judul,
                         'konten'               => $item->konten,
-                        'kategori'             => $teksHasil
+                        'kategori'             => $teksHasil,
                     ]);
                 }
 
-                return redirect()->route('pengukuran_balita.index')->with('success', "Hasil: $teksHasil. Data dan edukasi berhasil disimpan!");
+                return redirect()
+                    ->route('pengukuran_balita.index')
+                    ->with('success', "Hasil: $teksHasil. Data berhasil disimpan!");
             }
 
-            return back()->withErrors(['api' => 'Gagal terhubung ke server prediksi.'])->withInput();
+            return back()
+                ->withErrors(['api' => 'Gagal terhubung ke server prediksi.'])
+                ->withInput();
 
         } catch (\Exception $e) {
-            return back()->withErrors(['error' => 'Terjadi kesalahan: ' . $e->getMessage()])->withInput();
+            return back()
+                ->withErrors(['error' => 'Terjadi kesalahan: ' . $e->getMessage()])
+                ->withInput();
         }
     }
 

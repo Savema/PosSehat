@@ -72,8 +72,8 @@
                                     @php
                                         $statusClass = match(strtolower($balita->hasil)) {
                                             'normal' => 'bg-success',
-                                            'pendek', 'stunting' => 'bg-danger',
-                                            'sangat pendek' => 'bg-dark',
+                                            'pendek', 'stunting' => 'bg-warning text-dark',
+                                            'sangat pendek' => 'bg-danger',
                                             default => 'bg-warning'
                                         };
                                     @endphp
