@@ -82,7 +82,12 @@ Route::get('/pengukuran-balita/{id}/detail',
 
 Route::post('/cetak-balita/{id}', [PengukuranBalitaController::class, 'cetakPdf']);
 
-Route::middleware(['auth','role:admin'])->group(function () {
-Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan');
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    // Halaman Utama Laporan
+    Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
+
+    // Route untuk Export (Pastikan name-nya sesuai dengan yang dipanggil di View/JS)
+    Route::get('/laporan/excel', [LaporanController::class, 'exportExcel'])->name('laporan.excel');
+    Route::get('/laporan/pdf', [LaporanController::class, 'exportPdf'])->name('laporan.pdf');
 });
 
