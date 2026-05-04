@@ -20,7 +20,7 @@ class DashboardController extends Controller
         $total_petugas = \App\Models\User::count();
 
         // 2. Hitung Balita yang terdeteksi Stunting (Hasil Terakhir)
-        $total_stunting = \App\Models\PengukuranBalita::where('hasil', 'Stunting')->count();
+        $total_stunting = \App\Models\PengukuranBalita::where('hasil', 'sangat pendek')->count();
 
         // 3. Siapkan Data Grafik (6 Bulan Terakhir)
         $label_bulan = [];
