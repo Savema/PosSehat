@@ -88,13 +88,18 @@
                 </table>
             </div>
 
-            <div class="d-flex justify-content-between align-items-center mt-4">
-                <small class="text-muted">Menampilkan {{ $t_edukasi->firstItem() ?? 0 }} sampai {{ $t_edukasi->lastItem() ?? 0 }} dari {{ $t_edukasi->total() }} data</small>
-                <div>
-                    {{ $t_edukasi->withQueryString()->links() }}
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-4 px-2">
+                <div class="mb-3 mb-md-0">
+                    <p class="text-muted small mb-0">
+                        Menampilkan <span class="fw-bold text-dark">{{ $t_edukasi->firstItem() ?? 0 }}</span>
+                        sampai <span class="fw-bold text-dark">{{ $t_edukasi->lastItem() ?? 0 }}</span>
+                        dari <span class="fw-bold text-dark">{{ $t_edukasi->total() }}</span> data
+                    </p>
+                </div>
+                <div class="pagination-orange">
+                    {{ $t_edukasi->links() }}
                 </div>
             </div>
-            
         </div>
     </div>
 
@@ -112,48 +117,55 @@
     .btn-edit-custom:hover { background-color: #f59f00; color: white; }
     .btn-delete-custom { background-color: #fff5f5; color: #fa5252; border: none; border-radius: 8px; }
     .btn-delete-custom:hover { background-color: #fa5252; color: white; }
+    .pagination-orange .pagination {
+        gap: 5px;
+    }
+    .pagination-orange .page-link {
+        border-radius: 8px !important;
+        color: #FF782D !important;
+        border: 1px solid #eee !important;
+    }
+    .pagination-orange .page-item.active .page-link {
+        background-color: #FF782D !important;
+        border-color: #FF782D !important;
+        color: white !important;
+    }
+    .pagination-orange nav .flex.items-center.justify-between .hidden.sm-flex-1 {
+        display: none !important;
+    }
+
+    /* Jika masih ada teks 'Showing' di versi mobile */
+    .pagination-orange nav div:first-child p {
+        display: none !important;
+    }
+
+    /* Memastikan tombol angka tetap rapi */
+    .pagination-orange .pagination {
+        margin-bottom: 0;
+    }
 </style>
 
-<script>
 
+<script>
 let delayTimer;
 
-
-
 document.getElementById('search').addEventListener('keyup', function () {
-
     clearTimeout(delayTimer);
-
-
 
     let query = this.value;
 
-
-
     delayTimer = setTimeout(() => {
-
         fetch(`{{ route('edukasi.index') }}?search=` + query)
-
         .then(response => response.text())
-
         .then(html => {
-
             let parser = new DOMParser();
-
             let doc = parser.parseFromString(html, 'text/html');
 
-
-
             let newTable = doc.querySelector('#edukasi-table').innerHTML;
-
             document.getElementById('edukasi-table').innerHTML = newTable;
-
         });
-
     }, 300);
-
 });
-
 </script>
 
 @endsection

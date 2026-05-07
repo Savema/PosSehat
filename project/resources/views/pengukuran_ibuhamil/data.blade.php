@@ -111,8 +111,21 @@
                 </table>
             </div>
 
-            <div class="d-flex justify-content-center mt-4">
+            {{-- <div class="d-flex justify-content-center mt-4">
                 {{ $p_ibuhamil->withQueryString()->links() }}
+            </div> --}}
+
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-4 px-2">
+                <div class="mb-3 mb-md-0">
+                    <p class="text-muted small mb-0">
+                        Menampilkan <span class="fw-bold text-dark">{{ $p_ibuhamil->firstItem() ?? 0 }}</span>
+                        sampai <span class="fw-bold text-dark">{{ $p_ibuhamil->lastItem() ?? 0 }}</span>
+                        dari <span class="fw-bold text-dark">{{ $p_ibuhamil->total() }}</span> data
+                    </p>
+                </div>
+                <div class="pagination-orange">
+                    {{ $p_ibuhamil->links() }}
+                </div>
             </div>
         </div>
     </div>
@@ -132,6 +145,32 @@
     .btn-detail-custom:hover { background-color: #007bff; color: white; }
     .btn-delete-custom { background-color: #fff5f5; color: #fa5252; border: none; border-radius: 8px; }
     .btn-delete-custom:hover { background-color: #fa5252; color: white; }
+    .pagination-orange .pagination {
+        gap: 5px;
+    }
+    .pagination-orange .page-link {
+        border-radius: 8px !important;
+        color: #FF782D !important;
+        border: 1px solid #eee !important;
+    }
+    .pagination-orange .page-item.active .page-link {
+        background-color: #FF782D !important;
+        border-color: #FF782D !important;
+        color: white !important;
+    }
+    .pagination-orange nav .flex.items-center.justify-between .hidden.sm-flex-1 {
+        display: none !important;
+    }
+
+    /* Jika masih ada teks 'Showing' di versi mobile */
+    .pagination-orange nav div:first-child p {
+        display: none !important;
+    }
+
+    /* Memastikan tombol angka tetap rapi */
+    .pagination-orange .pagination {
+        margin-bottom: 0;
+    }
 </style>
 
 <script>

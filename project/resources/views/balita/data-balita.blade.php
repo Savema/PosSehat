@@ -107,10 +107,16 @@
                 </table>
             </div>
 
-            <div class="d-flex justify-content-between align-items-center mt-4">
-                <small class="text-muted">Menampilkan {{ $balita->firstItem() ?? 0 }} sampai {{ $balita->lastItem() ?? 0 }} dari {{ $balita->total() }} data</small>
-                <div>
-                    {{ $balita->withQueryString()->links() }}
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-4 px-2">
+                <div class="mb-3 mb-md-0">
+                    <p class="text-muted small mb-0">
+                        Menampilkan <span class="fw-bold text-dark">{{ $balita->firstItem() ?? 0 }}</span>
+                        sampai <span class="fw-bold text-dark">{{ $balita->lastItem() ?? 0 }}</span>
+                        dari <span class="fw-bold text-dark">{{ $balita->total() }}</span> data
+                    </p>
+                </div>
+                <div class="pagination-orange">
+                    {{ $balita->links() }}
                 </div>
             </div>
 
@@ -197,6 +203,32 @@
     .badge:hover {
         opacity: 0.8;
         cursor: default;
+    }
+    .pagination-orange .pagination {
+        gap: 5px;
+    }
+    .pagination-orange .page-link {
+        border-radius: 8px !important;
+        color: #FF782D !important;
+        border: 1px solid #eee !important;
+    }
+    .pagination-orange .page-item.active .page-link {
+        background-color: #FF782D !important;
+        border-color: #FF782D !important;
+        color: white !important;
+    }
+    .pagination-orange nav .flex.items-center.justify-between .hidden.sm-flex-1 {
+        display: none !important;
+    }
+
+    /* Jika masih ada teks 'Showing' di versi mobile */
+    .pagination-orange nav div:first-child p {
+        display: none !important;
+    }
+
+    /* Memastikan tombol angka tetap rapi */
+    .pagination-orange .pagination {
+        margin-bottom: 0;
     }
 </style>
 

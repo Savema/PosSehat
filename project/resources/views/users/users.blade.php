@@ -96,14 +96,18 @@
                     </tbody>
                 </table>
             </div>
-
-            <div class="d-flex justify-content-between align-items-center mt-4">
-                <small class="text-muted">Menampilkan {{ $user->firstItem() ?? 0 }} sampai {{ $user->lastItem() ?? 0 }} dari {{ $user->total() }} data</small>
-                <div>
-                    {{ $user->withQueryString()->links() }}
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-4 px-2">
+                <div class="mb-3 mb-md-0">
+                    <p class="text-muted small mb-0">
+                        Menampilkan <span class="fw-bold text-dark">{{ $user->firstItem() ?? 0 }}</span>
+                        sampai <span class="fw-bold text-dark">{{ $user->lastItem() ?? 0 }}</span>
+                        dari <span class="fw-bold text-dark">{{ $user->total() }}</span> data
+                    </p>
+                </div>
+                <div class="pagination-orange">
+                    {{ $user->links() }}
                 </div>
             </div>
-
         </div>
     </div>
 
@@ -162,6 +166,32 @@
     .form-control:focus {
         border-color: #FF782D;
         box-shadow: 0 0 0 0.2rem rgba(255, 120, 45, 0.25);
+    }
+    .pagination-orange .pagination {
+        gap: 5px;
+    }
+    .pagination-orange .page-link {
+        border-radius: 8px !important;
+        color: #FF782D !important;
+        border: 1px solid #eee !important;
+    }
+    .pagination-orange .page-item.active .page-link {
+        background-color: #FF782D !important;
+        border-color: #FF782D !important;
+        color: white !important;
+    }
+    .pagination-orange nav .flex.items-center.justify-between .hidden.sm-flex-1 {
+        display: none !important;
+    }
+
+    /* Jika masih ada teks 'Showing' di versi mobile */
+    .pagination-orange nav div:first-child p {
+        display: none !important;
+    }
+
+    /* Memastikan tombol angka tetap rapi */
+    .pagination-orange .pagination {
+        margin-bottom: 0;
     }
 </style>
 
