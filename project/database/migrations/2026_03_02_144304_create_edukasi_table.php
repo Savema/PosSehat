@@ -38,7 +38,7 @@ return new class extends Migration
                 'Ibu hamil gizi kurang',
                 'Ibu hamil gizi normal',
                 'Ibu hamil gizi lebih',
-                'Ibu hamil obesitas',
+                'Ibu hamil obesitas'
             ])->nullable();
 
             $table->timestamps();

@@ -31,9 +31,6 @@ return new class extends Migration
             $table->string('hasil');
             $table->decimal('zs_tbu', 5, 2)->nullable();
             $table->decimal('bmi', 5, 2)->nullable();
-            $table->decimal('zs_bmi_u', 5, 2)->nullable();
-
-            $table->string('status_gizi_bmi', 100)->nullable();
 
             $table->timestamps();
         });

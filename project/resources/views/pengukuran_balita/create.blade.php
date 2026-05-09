@@ -49,17 +49,16 @@
 
                     <div class="col-md-6 mb-3">
                         <label class="form-label fw-semibold">Nama Balita</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
-                            <select name="balita_id" id="balita_id" class="form-select border-start-0 custom-input select2" required>
-                                <option value="" selected disabled>Cari nama balita...</option>
-                                @foreach($balita as $b)
-                                    <option value="{{ $b->id }}" data-tgl="{{ $b->tgl_lahir }}" data-jk="{{ $b->jenis_kelamin }}">
-                                        {{ $b->nama }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
+                        <select name="balita_id" id="balita_id" class="form-select custom-input" required>
+                            <option value="" selected disabled></option>
+                            @foreach($balita as $b)
+                                <option value="{{ $b->id }}"
+                                    data-tgl="{{ $b->tgl_lahir }}"
+                                    data-jk="{{ $b->jenis_kelamin }}">
+                                    {{ $b->nama }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
 
                     <div class="col-md-6 mb-3">
@@ -127,26 +126,46 @@
 </style>
 
 <script>
-// JavaScript kamu tetap sama, logikanya sudah benar
+$(document).ready(function() {
+    // Inisialisasi Select2
+    $('#balita_id').select2({
+        placeholder: 'Cari nama balita...',
+        allowClear: true,
+        width: '100%'
+    });
+
+    // Event change untuk Select2 harus pakai .on('change')
+    $('#balita_id').on('change', function() {
+        updateData();
+    });
+
+    // Event change tanggal tetap sama
+    document.getElementById("tanggal_ukur").addEventListener("change", updateData);
+});
+
 function updateData() {
     let sel = document.getElementById("balita_id");
     let opt = sel.options[sel.selectedIndex];
 
-    if (opt.value) {
+    if (opt && opt.value) {
         let jk = opt.getAttribute("data-jk");
         document.getElementById("jk_display").value = (jk == 1) ? "Laki-laki" : "Perempuan";
         document.getElementById("jk_input").value = jk;
 
         let tglLahir = new Date(opt.getAttribute("data-tgl"));
         let tglUkur = new Date(document.getElementById("tanggal_ukur").value);
-        let totalBulan = (tglUkur.getFullYear() - tglLahir.getFullYear()) * 12 + (tglUkur.getMonth() - tglLahir.getMonth());
+        let totalBulan = (tglUkur.getFullYear() - tglLahir.getFullYear()) * 12
+                        + (tglUkur.getMonth() - tglLahir.getMonth());
         if (tglUkur.getDate() < tglLahir.getDate()) totalBulan--;
 
         document.getElementById("usia_display").value = (totalBulan < 0 ? 0 : totalBulan) + " Bulan";
         document.getElementById("usia_input").value = (totalBulan < 0 ? 0 : totalBulan);
+    } else {
+        document.getElementById("jk_display").value = '';
+        document.getElementById("jk_input").value = '';
+        document.getElementById("usia_display").value = '';
+        document.getElementById("usia_input").value = '';
     }
 }
-document.getElementById("balita_id").addEventListener("change", updateData);
-document.getElementById("tanggal_ukur").addEventListener("change", updateData);
 </script>
 @endsection

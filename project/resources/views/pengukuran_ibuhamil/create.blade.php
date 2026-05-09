@@ -51,17 +51,15 @@
 
                     <div class="col-md-6 mb-3">
                         <label class="form-label fw-semibold">Nama Ibu Hamil</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
-                            <select name="ibu_hamil_id" id="ibu_id" class="form-select border-start-0 custom-input select2" required>
-                                <option value="" selected disabled>Cari nama ibu...</option>
-                                @foreach($ibu_hamil as $ibu)
-                                    <option value="{{ $ibu->id }}" data-tgl="{{ $ibu->tgl_lahir }}">
-                                        {{ $ibu->nama }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
+                        <select name="ibu_hamil_id" id="ibu_id" class="form-select custom-input" required>
+                            <option value="" selected disabled></option>
+                            @foreach($ibu_hamil as $ibu)
+                                <option value="{{ $ibu->id }}"
+                                    data-tgl="{{ $ibu->tgl_lahir }}">
+                                    {{ $ibu->nama }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
 
                     <div class="col-md-6 mb-3">
@@ -132,21 +130,34 @@
 </style>
 
 <script>
-document.getElementById("ibu_id").addEventListener("change", function() {
-    let selected = this.options[this.selectedIndex];
-    let tgl_lahir = selected.getAttribute("data-tgl");
+$(document).ready(function() {
+    // Inisialisasi Select2
+    $('#ibu_id').select2({
+        placeholder: 'Cari nama ibu hamil...',
+        allowClear: true,
+        width: '100%'
+    });
 
-    if(tgl_lahir){
-        let lahir = new Date(tgl_lahir);
-        let today = new Date();
-        let usia = today.getFullYear() - lahir.getFullYear();
-        let m = today.getMonth() - lahir.getMonth();
+    // Event change Select2
+    $('#ibu_id').on('change', function() {
+        let selected = document.getElementById("ibu_id");
+        let opt = selected.options[selected.selectedIndex];
+        let tgl_lahir = opt.getAttribute("data-tgl");
 
-        if (m < 0 || (m === 0 && today.getDate() < lahir.getDate())) {
-            usia--;
+        if (tgl_lahir) {
+            let lahir = new Date(tgl_lahir);
+            let today = new Date();
+            let usia = today.getFullYear() - lahir.getFullYear();
+            let m = today.getMonth() - lahir.getMonth();
+
+            if (m < 0 || (m === 0 && today.getDate() < lahir.getDate())) {
+                usia--;
+            }
+            document.getElementById("usia").value = usia + " Tahun";
+        } else {
+            document.getElementById("usia").value = '';
         }
-        document.getElementById("usia").value = usia + " Tahun";
-    }
+    });
 });
 </script>
 @endsection
