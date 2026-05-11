@@ -78,30 +78,50 @@
 
                     <div class="col-12"><hr class="my-4 opacity-25"></div>
 
-                    <div class="col-md-4 mb-3">
-                        <label class="form-label fw-semibold">Berat Badan</label>
-                        <div class="input-group">
-                            <input type="number" step="0.1" class="form-control custom-input fs-5 fw-bold text-center" name="berat_badan" required placeholder="0.0">
-                            <span class="input-group-text bg-light border-start-0 text-muted">kg</span>
+                        {{-- Berat Badan --}}
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label fw-semibold">Berat Badan</label>
+                            <div class="input-group">
+                                <input type="number"
+                                    step="any"
+                                    min="0"
+                                    class="form-control custom-input fs-5 fw-bold text-center"
+                                    name="berat_badan"
+                                    required
+                                    placeholder="0.0">
+                                <span class="input-group-text bg-light border-start-0 text-muted">kg</span>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="col-md-4 mb-3">
-                        <label class="form-label fw-semibold">Tinggi Badan</label>
-                        <div class="input-group">
-                            <input type="number" step="0.1" class="form-control custom-input fs-5 fw-bold text-center" name="tinggi_badan" required placeholder="0.0">
-                            <span class="input-group-text bg-light border-start-0 text-muted">cm</span>
+                        {{-- Tinggi Badan --}}
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label fw-semibold">Tinggi Badan</label>
+                            <div class="input-group">
+                                <input type="number"
+                                    step="any"
+                                    min="0"
+                                    class="form-control custom-input fs-5 fw-bold text-center"
+                                    name="tinggi_badan"
+                                    required
+                                    placeholder="0.0">
+                                <span class="input-group-text bg-light border-start-0 text-muted">cm</span>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="col-md-4 mb-3">
-                        <label class="form-label fw-semibold">LILA (Lingkar Lengan)</label>
-                        <div class="input-group">
-                            <input type="number" step="0.1" class="form-control custom-input fs-5 fw-bold text-center" name="lila" required placeholder="0.0">
-                            <span class="input-group-text bg-light border-start-0 text-muted">cm</span>
+                        {{-- LILA --}}
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label fw-semibold">LILA (Lingkar Lengan)</label>
+                            <div class="input-group">
+                                <input type="number"
+                                    step="any"
+                                    min="0"
+                                    class="form-control custom-input fs-5 fw-bold text-center"
+                                    name="lila"
+                                    required
+                                    placeholder="0.0">
+                                <span class="input-group-text bg-light border-start-0 text-muted">cm</span>
+                            </div>
                         </div>
-                    </div>
-                </div>
 
                 <div class="d-flex justify-content-end gap-2 border-top mt-4 pt-4">
                     <a href="{{ route('pengukuran_ibu_hamil.index') }}" class="btn btn-light px-4" style="border-radius: 10px;">Batal</a>
