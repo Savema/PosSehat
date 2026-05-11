@@ -37,8 +37,26 @@ class AnakController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+   public function store(Request $request)
     {
+        // 1. Perbaiki aturan validasi di sini
+        $request->validate([
+            // Pakai digits:16 agar user wajib input 16 angka
+            'nik' => 'required|digits:16|unique:balita,nik',
+            'nama' => 'required',
+            'jenis_kelamin' => 'required',
+            'tgl_lahir' => 'required|date|before_or_equal:today',
+            'nama_ortu' => 'required',
+            'alamat' => 'required'
+        ], [
+            // Custom pesan error
+            'nik.required' => 'NIK wajib diisi.',
+            'nik.digits'   => 'NIK harus berjumlah 16 digit angka.',
+            'nik.unique'   => 'NIK ini sudah terdaftar, silakan masukkan NIK lain.',
+            'tgl_lahir.before_or_equal' => 'Tanggal lahir tidak boleh melebihi hari ini.',
+        ]);
+
+        // Jika lolos validasi, data akan disimpan
         Anak::create([
             'nik' => $request->nik,
             'nama' => $request->nama,

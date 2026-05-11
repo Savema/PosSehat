@@ -38,6 +38,18 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
+        // 1. Tambahkan validasi ini
+        $request->validate([
+            'email' => 'required|email|unique:users,email',
+            'nama' => 'required',
+            'no_hp' => 'required',
+            'password' => 'required|min:8',
+            'role' => 'required'
+        ], [
+            // Custom pesan error (opsional)
+            'email.unique' => 'Email ini sudah terdaftar, silakan gunakan email lain.',
+        ]);
+
         User::create([
             'nama' => $request->nama,
             'no_hp' => $request->no_hp,
