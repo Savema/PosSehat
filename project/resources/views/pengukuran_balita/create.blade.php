@@ -78,7 +78,7 @@
                     <div class="col-md-4 mb-3">
                         <label class="form-label fw-semibold">Berat Badan (kg)</label>
                         <div class="input-group">
-                            <input type="number" class="form-control custom-input text-center fs-5 fw-bold" name="berat_badan" required placeholder="0.00">
+                            <input type="number" class="form-control custom-input text-center fs-5 fw-bold" name="berat_badan" required placeholder="0.00" step="any" min="0">
                             <span class="input-group-text bg-light border-start-0 text-muted">kg</span>
                         </div>
                     </div>
@@ -86,7 +86,7 @@
                     <div class="col-md-4 mb-3">
                         <label class="form-label fw-semibold">Tinggi Badan (cm)</label>
                         <div class="input-group">
-                            <input type="number" class="form-control custom-input text-center fs-5 fw-bold" name="tinggi_badan" required placeholder="0.0">
+                            <input type="number" class="form-control custom-input text-center fs-5 fw-bold" name="tinggi_badan" required placeholder="0.0" step="any" min="0">
                             <span class="input-group-text bg-light border-start-0 text-muted">cm</span>
                         </div>
                     </div>
@@ -94,7 +94,7 @@
                     <div class="col-md-4 mb-3">
                         <label class="form-label fw-semibold">Lingkar Kepala (cm)</label>
                         <div class="input-group">
-                            <input type="number" class="form-control custom-input text-center fs-5 fw-bold" name="lingkar_kepala" required placeholder="0.0">
+                            <input type="number" class="form-control custom-input text-center fs-5 fw-bold" name="lingkar_kepala" required placeholder="0.0" step="any" min="0">
                             <span class="input-group-text bg-light border-start-0 text-muted">cm</span>
                         </div>
                     </div>

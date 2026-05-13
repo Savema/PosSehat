@@ -88,7 +88,8 @@
                                     class="form-control custom-input fs-5 fw-bold text-center"
                                     name="berat_badan"
                                     required
-                                    placeholder="0.0">
+                                    placeholder="0.0"
+                                    min="0">
                                 <span class="input-group-text bg-light border-start-0 text-muted">kg</span>
                             </div>
                         </div>
@@ -103,7 +104,8 @@
                                     class="form-control custom-input fs-5 fw-bold text-center"
                                     name="tinggi_badan"
                                     required
-                                    placeholder="0.0">
+                                    placeholder="0.0"
+                                    min="0">
                                 <span class="input-group-text bg-light border-start-0 text-muted">cm</span>
                             </div>
                         </div>
@@ -118,7 +120,8 @@
                                     class="form-control custom-input fs-5 fw-bold text-center"
                                     name="lila"
                                     required
-                                    placeholder="0.0">
+                                    placeholder="0.0"
+                                    min="0">
                                 <span class="input-group-text bg-light border-start-0 text-muted">cm</span>
                             </div>
                         </div>

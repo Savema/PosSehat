@@ -1,8 +1,12 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-white py-2 shadow-sm fixed-top" style="border-bottom: 2px solid #fff5f0;">
-  <div class="container-fluid px-4">
-    <a class="navbar-brand fw-bold d-flex align-items-center" href="/dashboard" style="color: #FF782D; font-size: 1.5rem; letter-spacing: -0.5px;">
-        <i class="bi bi-heart-pulse-fill me-2"></i> PosSehat
-    </a>
+    <div class="container-fluid px-4">
+        <div class="d-flex align-items-center">
+        <i class="bi bi-list toggle-sidebar-btn me-3" style="font-size: 1.5rem; color: #FF782D; cursor: pointer;"></i>
+
+        <a class="navbar-brand fw-bold d-flex align-items-center" href="/dashboard" style="color: #FF782D; font-size: 1.5rem; letter-spacing: -0.5px;">
+            <i class="bi bi-heart-pulse-fill me-2"></i> PosSehat
+        </a>
+    </div>
 
     <div class="ms-auto d-flex align-items-center">
         <ul class="navbar-nav">

@@ -24,6 +24,7 @@
 <!-- Baru Select2 -->
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <!-- CSS Select2 di head -->
+
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
 
     <style>
@@ -176,8 +177,15 @@
     }
     /* --- Sidebar Styling --- */
     .sidebar {
+        position: fixed; /* Agar tetap di posisinya saat scroll */
+        top: 60px;       /* Sesuaikan dengan tinggi navbarmu */
+        bottom: 0;
+        width: 300px;
+        z-index: 996;    /* Agar berada di atas konten utama */
         background-color: #ffffff;
         padding: 20px 15px;
+        transition: all 0.3s;
+        box-shadow: 0px 0px 20px rgba(1, 41, 112, 0.1);
     }
 
     .sidebar-nav .nav-item {
@@ -221,6 +229,33 @@
     .sidebar-nav .nav-link:hover i {
         color: #ffffff;      /* Ikon jadi putih saat hover */
     }
+    @media (max-width: 1199px) {
+    .toggle-sidebar::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.3);
+        z-index: 995;
+    }
+    }
+
+    /* Pengaturan untuk Desktop (>= 1200px) */
+    @media (min-width: 1200px) {
+        .sidebar {
+            left: 0; /* Muncul */
+        }
+        #main, #footer {
+            margin-left: 300px;
+            transition: all 0.3s;
+        }
+        /* Sembunyikan sidebar saat tombol diklik di desktop */
+        .toggle-sidebar .sidebar {
+            left: -300px;
+        }
+        .toggle-sidebar #main, .toggle-sidebar #footer {
+            margin-left: 0;
+        }
+    }
   </style>
 </head>
 
@@ -244,7 +279,54 @@
 <script src="{{ asset('assets/js/main.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  (function() {
+    "use strict";
 
+    /**
+     * Helper function untuk mempermudah selector
+     */
+    const select = (el, all = false) => {
+      el = el.trim()
+      if (all) {
+        return [...document.querySelectorAll(el)]
+      } else {
+        return document.querySelector(el)
+      }
+    }
+
+    /**
+     * Helper untuk event listener
+     */
+    const on = (type, el, listener, all = false) => {
+      if (all) {
+        select(el, all).forEach(e => e.addEventListener(type, listener))
+      } else {
+        select(el, all).addEventListener(type, listener)
+      }
+    }
+    document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('toggle-sidebar-btn') || e.target.closest('.toggle-sidebar-btn')) {
+        document.body.classList.toggle('toggle-sidebar');
+    }
+    });
+  })();
+  document.addEventListener('click', function(e) {
+  // Toggle sidebar
+  if (e.target.classList.contains('toggle-sidebar-btn') || e.target.closest('.toggle-sidebar-btn')) {
+    document.body.classList.toggle('toggle-sidebar');
+    return;
+  }
+
+  // Tutup sidebar saat klik overlay di mobile
+  const sidebar = document.querySelector('.sidebar');
+  if (window.innerWidth < 1200 &&
+      document.body.classList.contains('toggle-sidebar') &&
+      !sidebar.contains(e.target)) {
+    document.body.classList.remove('toggle-sidebar');
+  }
+});
+</script>
   @stack('scripts')
 </body>
 
