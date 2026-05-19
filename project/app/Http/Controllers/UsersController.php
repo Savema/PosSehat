@@ -43,7 +43,7 @@ class UsersController extends Controller
             'email' => 'required|email|unique:users,email',
             'nama' => 'required',
             'no_hp' => 'required',
-            'password' => 'required|min:8',
+            // 'password' => 'required|min:8',
             'role' => 'required'
         ], [
             // Custom pesan error (opsional)
