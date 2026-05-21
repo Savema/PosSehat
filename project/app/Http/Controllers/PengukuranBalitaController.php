@@ -51,7 +51,7 @@ class PengukuranBalitaController extends Controller
             // Request ke Flask API
             $response = Http::timeout(10)->post('http://127.0.0.1:5000/predict', [
                 'JK'         => (int) $request->jenis_kelamin,
-                'Usia_Bulan' => (int) $request->usia,        // ← diperbaiki
+                'Usia_Bulan' => (int) $request->usia,        
                 'Berat'      => (float) $request->berat_badan,
                 'Tinggi'     => (float) $request->tinggi_badan,
             ]);
