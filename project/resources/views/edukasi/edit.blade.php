@@ -46,10 +46,10 @@
                                 </optgroup>
 
                                 <optgroup label="Kategori Ibu Hamil">
-                                    <option value="ibu hamil gizi kurang" {{ old('kategori', $t_edukasi->kategori) == 'ibu hamil gizi kurang' ? 'selected' : '' }}>Gizi Kurang</option>
-                                    <option value="ibu hamil gizi normal" {{ old('kategori', $t_edukasi->kategori) == 'ibu hamil gizi normal' ? 'selected' : '' }}>Gizi Normal</option>
-                                    <option value="ibu hamil gizi lebih" {{ old('kategori', $t_edukasi->kategori) == 'ibu hamil gizi lebih' ? 'selected' : '' }}>Gizi Lebih</option>
-                                    <option value="ibu hamil obesitas" {{ old('kategori', $t_edukasi->kategori) == 'ibu hamil obesitas' ? 'selected' : '' }}>Obesitas</option>
+                                    <option value="ibu hamil gizi kurang" {{ old('kategori', $t_edukasi->kategori) == 'Ibu Hamil Gizi Kurang' ? 'selected' : '' }}>Gizi Kurang</option>
+                                    <option value="ibu hamil gizi normal" {{ old('kategori', $t_edukasi->kategori) == 'Ibu Hamil Gizi Normal' ? 'selected' : '' }}>Gizi Normal</option>
+                                    <option value="ibu hamil gizi lebih" {{ old('kategori', $t_edukasi->kategori) == 'Ibu Hamil Gizi Lebih' ? 'selected' : '' }}>Gizi Lebih</option>
+                                    <option value="ibu hamil obesitas" {{ old('kategori', $t_edukasi->kategori) == 'Ibu Hamil Obesitas' ? 'selected' : '' }}>Obesitas</option>
                                 </optgroup>
                             </select>
                         </div>

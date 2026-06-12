@@ -28,7 +28,7 @@
                         <i class="bi bi-search" style="color: #FF782D;"></i>
                     </span>
                     <input type="text" name="search" class="form-control border-start-0" id="search"
-                        placeholder="Cari judul edukasi..."
+                        placeholder="Cari kategori edukasi..."
                         value="{{ request('search') }}" style="border-radius: 0 10px 10px 0;">
                 </div>
             </form>

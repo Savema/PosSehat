@@ -13,7 +13,7 @@ class EdukasiController extends Controller
 
         $t_edukasi = Edukasi::query()
             ->when($search, function ($query) use ($search) {
-                $query->where('judul', 'like', "%{$search}%");
+                $query->where('kategori', 'like', "%{$search}%");
             })
             ->paginate(10);
 
